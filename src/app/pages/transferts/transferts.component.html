@@ -1,0 +1,186 @@
+<div class="page-layout">
+  <app-sidebar />
+
+  <main class="page-main">
+    <app-navbar />
+
+    <div class="page-content">
+
+      <header class="page-header">
+        <h1 class="page-title">Virements</h1>
+        <p class="page-subtitle">
+          Effectuez des virements vers n'importe quel compte Axioma
+        </p>
+      </header>
+
+      <div class="transfers-layout">
+
+        <!-- ══════ FORMULAIRE ══════ -->
+        <section class="panel">
+          <header class="panel__header">
+            <h2 class="panel__title">Nouveau virement</h2>
+          </header>
+
+          <div class="panel__body">
+
+            <div class="alert alert--success" *ngIf="success" role="alert">
+              <i class="ti ti-circle-check" aria-hidden="true"></i> {{ success }}
+            </div>
+            <div class="alert alert--danger" *ngIf="error" role="alert">
+              <i class="ti ti-alert-circle" aria-hidden="true"></i> {{ error }}
+            </div>
+
+            <form [formGroup]="transferForm" (ngSubmit)="onSubmit()">
+
+              <!-- Compte émetteur -->
+              <div class="form-group">
+                <label class="form-label" for="sender">
+                  Compte émetteur <span class="required">*</span>
+                </label>
+                <select id="sender" class="form-input"
+                  formControlName="sender_id"
+                  (change)="onSenderChange()"
+                  [class.form-input--error]="
+                    senderIdCtrl?.invalid && senderIdCtrl?.touched
+                  ">
+                  <option value="" disabled>Sélectionnez un compte</option>
+                  <option *ngFor="let acc of accounts" [value]="acc.id">
+                    {{ acc.label }} — {{ formatAmount(acc.balance) }}
+                  </option>
+                </select>
+                <span class="form-error"
+                  *ngIf="senderIdCtrl?.invalid && senderIdCtrl?.touched">
+                  Veuillez sélectionner un compte.
+                </span>
+              </div>
+
+              <!-- Solde disponible -->
+              <div class="balance-preview" *ngIf="selectedAccount">
+                <div class="balance-preview__row">
+                  <span class="balance-preview__label">Solde disponible</span>
+                  <span class="balance-preview__value">
+                    {{ formatAmount(selectedAccount.balance) }}
+                  </span>
+                </div>
+                <div class="balance-preview__row"
+                     *ngIf="transferForm.value.amount > 0">
+                  <span class="balance-preview__label">Après virement</span>
+                  <span class="balance-preview__value"
+                    [class.balance-preview__value--danger]="insufficientBalance">
+                    {{ balanceAfter !== null ? formatAmount(balanceAfter) : '—' }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Compte destinataire -->
+              <div class="form-group">
+                <label class="form-label" for="receiver">
+                  Numéro du compte destinataire <span class="required">*</span>
+                </label>
+                <input id="receiver" type="text" class="form-input"
+                  formControlName="receiver_account_number"
+                  [class.form-input--error]="
+                    receiverCtrl?.invalid && receiverCtrl?.touched
+                  "
+                  placeholder="ACC-12345678"
+                  autocomplete="off" />
+                <span class="form-error"
+                  *ngIf="receiverCtrl?.invalid && receiverCtrl?.touched">
+                  Format invalide. Exemple : ACC-12345678
+                </span>
+              </div>
+
+              <!-- Montant -->
+              <div class="form-group">
+                <label class="form-label" for="amount">
+                  Montant (FCFA) <span class="required">*</span>
+                </label>
+                <div class="input-currency">
+                  <input id="amount" type="number" class="form-input"
+                    formControlName="amount"
+                    [class.form-input--error]="
+                      amountCtrl?.invalid && amountCtrl?.touched ||
+                      insufficientBalance
+                    "
+                    placeholder="0"
+                    min="1" />
+                  <span class="currency-tag">FCFA</span>
+                </div>
+                <span class="form-error"
+                  *ngIf="amountCtrl?.invalid && amountCtrl?.touched">
+                  Montant invalide (minimum 1 FCFA).
+                </span>
+                <span class="form-error" *ngIf="insufficientBalance">
+                  Solde insuffisant.
+                </span>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group">
+                <label class="form-label" for="description">
+                  Motif (facultatif)
+                </label>
+                <input id="description" type="text" class="form-input"
+                  formControlName="description"
+                  placeholder="Ex : Loyer, remboursement..." />
+              </div>
+
+              <button type="submit" class="btn btn--primary btn--full"
+                [disabled]="transferForm.invalid ||
+                            insufficientBalance || submitting">
+                <i class="ti ti-loader-2 spin"
+                   *ngIf="submitting" aria-hidden="true"></i>
+                <i class="ti ti-send"
+                   *ngIf="!submitting" aria-hidden="true"></i>
+                {{ submitting ? 'Traitement...' : 'Effectuer le virement' }}
+              </button>
+
+            </form>
+          </div>
+        </section>
+
+        <!-- ══════ HISTORIQUE ══════ -->
+        <section class="panel">
+          <header class="panel__header">
+            <h2 class="panel__title">Historique des virements</h2>
+          </header>
+
+          <div class="skeleton-rows" *ngIf="loadingHistory">
+            <div class="skeleton-row"
+                 *ngFor="let i of [1,2,3,4]"></div>
+          </div>
+
+          <ul class="tx-list"
+              *ngIf="!loadingHistory && transfers.length > 0">
+            <li class="tx-item"
+                *ngFor="let t of transfers; trackBy: trackById">
+              <div class="tx-icon tx-icon--transfer">
+                <i class="ti ti-arrows-exchange" aria-hidden="true"></i>
+              </div>
+              <div class="tx-info">
+                <p class="tx-desc">
+                  {{ t.description || 'Virement' }}
+                </p>
+                <p class="tx-meta">
+                  {{ t.sender }} → {{ t.receiver }}
+                </p>
+                <p class="tx-date">{{ formatDate(t.date) }}</p>
+              </div>
+              <span class="tx-amount">
+                {{ formatAmount(t.amount) }}
+              </span>
+            </li>
+          </ul>
+
+          <div class="empty-state"
+               *ngIf="!loadingHistory && transfers.length === 0">
+            <i class="ti ti-arrows-exchange" aria-hidden="true"></i>
+            <p>Aucun virement effectué.</p>
+          </div>
+
+        </section>
+
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,165 @@
+<div class="page-layout">
+  <!-- 1. Correction de la balise fermante ici -->
+  <app-sidebar></app-sidebar>
+ 
+  <main class="page-main">
+    <!-- 2. Correction de la balise fermante ici -->
+    <app-navbar></app-navbar>
+ 
+    <div class="page-content">
+ 
+      <!-- ══════ EN-TÊTE ══════ -->
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">Notifications</h1>
+          <p class="page-subtitle">
+            {{ totalCount }} notification{{ totalCount > 1 ? 's' : '' }}
+            <span *ngIf="unreadCount > 0" class="unread-chip">
+              {{ unreadCount }} non lue{{ unreadCount > 1 ? 's' : '' }}
+            </span>
+          </p>
+        </div>
+        <button
+          class="btn btn--ghost"
+          (click)="markAllAsRead()"
+          *ngIf="unreadCount > 0"
+          [disabled]="loading"
+        >
+          <i class="ti ti-checks" aria-hidden="true"></i>
+          Tout marquer lu
+        </button>
+      </header>
+ 
+      <!-- ══════ ALERTES ══════ -->
+      <div class="alert alert--success" *ngIf="success" role="alert">
+        <i class="ti ti-circle-check" aria-hidden="true"></i> {{ success }}
+      </div>
+      <div class="alert alert--danger" *ngIf="error" role="alert">
+        <i class="ti ti-alert-circle" aria-hidden="true"></i> {{ error }}
+      </div>
+ 
+      <!-- ══════ FILTRES ══════ -->
+      <div class="filter-bar" role="tablist" aria-label="Filtrer les notifications">
+        <button
+          class="filter-btn"
+          [class.filter-btn--active]="activeFilter === 'ALL'"
+          (click)="setFilter('ALL')"
+          role="tab"
+          [attr.aria-selected]="activeFilter === 'ALL'"
+        >
+          Toutes
+        </button>
+        <button
+          class="filter-btn"
+          [class.filter-btn--active]="activeFilter === 'UNREAD'"
+          (click)="setFilter('UNREAD')"
+          role="tab"
+          [attr.aria-selected]="activeFilter === 'UNREAD'"
+        >
+          Non lues
+          <span class="filter-badge" *ngIf="unreadCount > 0">
+            {{ unreadCount }}
+          </span>
+        </button>
+        <button
+          class="filter-btn"
+          [class.filter-btn--active]="activeFilter === 'READ'"
+          (click)="setFilter('READ')"
+          role="tab"
+          [attr.aria-selected]="activeFilter === 'READ'"
+        >
+          Lues
+        </button>
+      </div>
+ 
+      <!-- ══════ SKELETON ══════ -->
+      <div class="notif-list notif-list--skeleton" *ngIf="loading">
+        <div class="skeleton-item" *ngFor="let i of [1,2,3,4,5,6]"></div>
+      </div>
+ 
+      <!-- ══════ LISTE ══════ -->
+      <ul class="notif-list"
+          *ngIf="!loading && filteredNotifications.length > 0"
+          role="list">
+        <li
+          class="notif-item"
+          [class.notif-item--unread]="!notif.is_read"
+          *ngFor="let notif of filteredNotifications; trackBy: trackById"
+          (click)="markAsRead(notif)"
+          [attr.aria-label]="notif.is_read ? notif.message : 'Non lue : ' + notif.message"
+        >
+          <!-- Icône type -->
+          <div class="notif-item__icon" [ngClass]="getTypeClass(notif.type)">
+            <i class="ti" [ngClass]="getTypeIcon(notif.type)"
+               aria-hidden="true"></i>
+          </div>
+ 
+          <!-- Contenu -->
+          <div class="notif-item__body">
+            <div class="notif-item__meta">
+              <span class="notif-item__type">
+                {{ getTypeLabel(notif.type) }}
+              </span>
+              <span class="notif-item__time">
+                {{ getRelativeTime(notif.created_at) }}
+              </span>
+            </div>
+            <p class="notif-item__message">{{ notif.message }}</p>
+          </div>
+ 
+          <!-- Indicateur non lue -->
+          <div class="notif-item__status">
+            <span
+              class="notif-item__dot"
+              *ngIf="!notif.is_read"
+              aria-hidden="true"
+            ></span>
+            <i
+              class="ti ti-check notif-item__read"
+              *ngIf="notif.is_read"
+              aria-hidden="true"
+            ></i>
+          </div>
+        </li>
+      </ul>
+ 
+      <!-- ══════ ÉTAT VIDE ══════ -->
+      <div class="empty-state"
+           *ngIf="!loading && filteredNotifications.length === 0">
+        <div class="empty-state__icon" aria-hidden="true">
+          <i class="ti ti-bell-off"></i>
+        </div>
+        <p class="empty-state__title">
+          {{ activeFilter === 'UNREAD' ? 'Aucune notification non lue'
+           : activeFilter === 'READ'   ? 'Aucune notification lue'
+           :                             'Aucune notification' }}
+        </p>
+        <p class="empty-state__hint">
+          Les notifications apparaîtront ici après vos opérations bancaires.
+        </p>
+      </div>
+ 
+      <!-- ══════ PAGINATION ══════ -->
+      <nav class="pagination"
+           *ngIf="totalPages > 1"
+           aria-label="Pagination des notifications">
+        <button class="page-btn"
+                (click)="goToPage(currentPage - 1)"
+                [disabled]="currentPage === 1"
+                aria-label="Page précédente">
+          <i class="ti ti-chevron-left" aria-hidden="true"></i>
+        </button>
+        <span class="page-info">
+          Page {{ currentPage }} / {{ totalPages }}
+        </span>
+        <button class="page-btn"
+                (click)="goToPage(currentPage + 1)"
+                [disabled]="currentPage === totalPages"
+                aria-label="Page suivante">
+          <i class="ti ti-chevron-right" aria-hidden="true"></i>
+        </button>
+      </nav>
+ 
+    </div>
+  </main>
+</div>

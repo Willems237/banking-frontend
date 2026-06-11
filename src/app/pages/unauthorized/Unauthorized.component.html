@@ -1,0 +1,34 @@
+<div class="unauth-page">
+  <div class="unauth-card">
+
+    <!-- Icône -->
+    <div class="unauth-icon" aria-hidden="true">
+      <i class="ti ti-shield-x"></i>
+    </div>
+
+    <!-- Texte -->
+    <h1 class="unauth-title">Accès refusé</h1>
+    <p class="unauth-message">
+      Vous n'avez pas les autorisations nécessaires pour accéder à cette page.
+    </p>
+
+    <!-- Rôle actuel -->
+    <div class="unauth-role" *ngIf="userRole">
+      <span class="role-label">Votre rôle</span>
+      <span class="role-badge">{{ userRole }}</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="unauth-actions">
+      <button class="btn btn--primary" (click)="returnToDashboard()">
+        <i class="ti ti-home" aria-hidden="true"></i>
+        Retour au tableau de bord
+      </button>
+      <button class="btn btn--ghost" (click)="logout()">
+        <i class="ti ti-logout" aria-hidden="true"></i>
+        Se déconnecter
+      </button>
+    </div>
+
+  </div>
+</div>

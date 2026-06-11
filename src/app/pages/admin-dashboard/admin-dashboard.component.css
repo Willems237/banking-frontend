@@ -1,0 +1,412 @@
+/* ── Page Admin & Conteneur Global ── */
+.admin-page { 
+  padding: 2.5rem 2rem; 
+  max-width: 1250px; 
+  margin: 0 auto; 
+}
+
+.admin-page__header {
+  display: flex; 
+  align-items: center;
+  justify-content: space-between; 
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+.admin-page__title {
+  font-size: 1.65rem; 
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary); 
+  margin: 0;
+}
+.admin-page__subtitle {
+  font-size: .9rem; 
+  color: var(--color-text-secondary); 
+  margin: .35rem 0 0;
+  opacity: 0.85;
+}
+
+/* ── Cartes de Statistiques Globales (Grid Moderne) ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem; 
+  margin-bottom: 2rem;
+}
+.stat-card {
+  background: var(--color-background-primary);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  border-radius: 16px;
+  padding: 1.25rem; 
+  display: flex; 
+  flex-direction: column; 
+  gap: .4rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+}
+.stat-card__label {
+  font-size: 11px; 
+  font-weight: 600; 
+  text-transform: uppercase;
+  letter-spacing: .08em; 
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+}
+.stat-card__value {
+  font-size: 1.8rem; 
+  font-weight: 600; 
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ── Tableau de Contrôle des Utilisateurs (Data Table) ── */
+.table-card {
+  background: var(--color-background-primary);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 
+              0 12px 24px -4px rgba(0, 0, 0, 0.04);
+  border-radius: 20px; 
+  overflow: hidden;
+}
+.data-table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  font-size: .9rem; 
+}
+.data-table th {
+  padding: 1.1rem 1.25rem; 
+  text-align: left; 
+  font-size: .75rem;
+  font-weight: 600; 
+  text-transform: uppercase; 
+  letter-spacing: .08em;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border-tertiary);
+  background: var(--color-background-tertiary);
+}
+.data-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
+  color: var(--color-text-primary);
+  vertical-align: middle;
+}
+.data-table tr:last-child td { 
+  border-bottom: none; 
+}
+.data-table tr:hover td { 
+  background: linear-gradient(to right, var(--color-background-secondary), transparent); 
+}
+
+/* Cellule Profil Utilisateur */
+.user-cell { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+}
+.user-avatar {
+  width: 38px; 
+  height: 38px; 
+  border-radius: 12px; /* Carré arrondi premium style iOS */
+  background: rgba(14, 165, 233, 0.08);
+  color: #0ea5e9; 
+  font-size: 14px; 
+  font-weight: 600;
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  flex-shrink: 0;
+  border: 1px solid rgba(14, 165, 233, 0.12);
+}
+.user-name { 
+  font-weight: 600; 
+  font-size: .925rem; 
+  margin: 0; 
+  color: var(--color-text-primary);
+}
+.user-sub { 
+  font-size: .78rem; 
+  color: var(--color-text-secondary); 
+  margin: 2px 0 0; 
+  opacity: 0.85;
+}
+.text--muted { 
+  color: var(--color-text-secondary); 
+  opacity: 0.8;
+}
+
+/* ── Skeletons de Chargement (Shimmer Effect) ── */
+.skeleton-rows { 
+  padding: 1rem; 
+  display: flex; 
+  flex-direction: column; 
+  gap: .75rem; 
+}
+.skeleton-row {
+  height: 52px; 
+  border-radius: 10px;
+  background: linear-gradient(90deg, 
+    var(--color-background-secondary) 25%, 
+    var(--color-background-tertiary) 50%, 
+    var(--color-background-secondary) 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite linear;
+}
+@keyframes loading-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Badges Satinés Unifiés ── */
+.badge {
+  display: inline-flex; 
+  align-items: center;
+  padding: 4px 10px; 
+  border-radius: 8px;
+  font-size: 11px; 
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: 1px solid transparent;
+}
+.badge--success { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.badge--danger  { background: #fef2f2; color: #991b1b; border-color: #fca5a5; }
+.badge--warning { background: #fffbeb; color: #d97706; border-color: #fde68a; }
+.badge--info    { background: rgba(14, 165, 233, 0.06); color: #0ea5e9; border-color: rgba(14, 165, 233, 0.2); }
+.badge--neutral { background: var(--color-background-tertiary); color: var(--color-text-secondary); border-color: var(--color-border-tertiary); }
+
+/* ── Alertes Chics ── */
+.alert { 
+  display: flex; 
+  align-items: center; 
+  gap: .75rem; 
+  padding: .9rem 1.25rem;
+  border-radius: 12px; 
+  font-size: .9rem; 
+  font-weight: 500;
+  margin-bottom: 1.25rem; 
+  border: 1px solid transparent;
+}
+.alert--success { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.alert--danger  { background: #fef2f2; color: #991b1b; border-color: #fca5a5; }
+
+/* ── Modales de Configuration Flottantes ── */
+.modal-overlay {
+  position: fixed; 
+  inset: 0; 
+  background: rgba(15, 23, 42, 0.4); /* Teinte ardoise sombre transparente */
+  -webkit-backdrop-filter: blur(4px); /* Effet de flou de profondeur ultra-chic */
+  backdrop-filter: blur(4px); /* Effet de flou de profondeur ultra-chic */
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  z-index: 1000; 
+  padding: 1.5rem;
+}
+.modal {
+  background: var(--color-background-primary);
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.15);
+  width: 100%; 
+  max-width: 540px;
+  overflow: hidden;
+  animation: modal-appear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes modal-appear {
+  from { transform: translateY(12px) scale(0.97); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+.modal__header {
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  padding: 1.5rem 1.75rem 1rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
+}
+.modal__header h2 { 
+  font-size: 1.15rem; 
+  font-weight: 600; 
+  margin: 0; 
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+.modal__body { 
+  padding: 1.75rem; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.25rem; 
+}
+.modal__footer { 
+  display: flex; 
+  gap: .75rem; 
+  padding: 1rem 1.75rem 1.75rem; 
+  justify-content: flex-end; 
+  background-color: var(--color-background-tertiary);
+  border-top: 1px solid var(--color-border-tertiary);
+}
+
+/* Formulaires Rattachés */
+.form-row { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 1rem; 
+}
+.form-group { 
+  display: flex; 
+  flex-direction: column; 
+  gap: .5rem; 
+}
+.form-label { 
+  font-size: .85rem; 
+  font-weight: 600; 
+  color: var(--color-text-primary); 
+}
+
+/* Style des inputs généraux hérités d'Axioma */
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: .925rem;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 10px;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.form-input:focus {
+  outline: none;
+  border-color: #1A3C5E;
+  box-shadow: 0 0 0 3px rgba(26, 60, 94, 0.12);
+}
+.form-input--error { 
+  border-color: #ef4444 !important; 
+}
+.form-input--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+.form-error { 
+  font-size: .78rem; 
+  font-weight: 500;
+  color: #ef4444; 
+  margin-top: 0.1rem;
+}
+
+/* ── Sélecteur de Rôles / Options Segmentées ── */
+.type-selector { 
+  display: flex; 
+  gap: .5rem; 
+  flex-wrap: wrap; 
+}
+.type-option {
+  padding: .5rem 1.1rem; 
+  border-radius: 10px; 
+  cursor: pointer;
+  border: 1px solid var(--color-border-secondary);
+  font-size: .85rem; 
+  font-weight: 500;
+  color: var(--color-text-secondary); 
+  background-color: var(--color-background-primary);
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.type-option:hover {
+  border-color: var(--color-border-primary);
+  color: var(--color-text-primary);
+}
+.type-option--selected {
+  background: rgba(14, 165, 233, 0.08); 
+  border-color: #0ea5e9;
+  color: #0ea5e9; 
+  font-weight: 600;
+}
+
+/* ── Boutons d'Administration Corporatifs ── */
+.btn {
+  display: inline-flex; 
+  align-items: center; 
+  gap: .5rem;
+  padding: .75rem 1.5rem; 
+  border-radius: 12px;
+  font-size: .9rem; 
+  font-weight: 600; 
+  cursor: pointer;
+  border: 1px solid transparent; 
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn--sm { 
+  padding: .5rem 1rem; 
+  font-size: .82rem; 
+  border-radius: 8px;
+}
+.btn--primary { 
+  background: #1A3C5E; 
+  color: #ffffff; 
+  border-color: #1A3C5E; 
+  box-shadow: 0 4px 12px rgba(26, 60, 94, 0.15);
+}
+.btn--primary:hover:not(:disabled) { 
+  background: #122b44;
+  border-color: #122b44;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(26, 60, 94, 0.22);
+}
+.btn--primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+.btn--ghost { 
+  background: transparent; 
+  color: var(--color-text-primary); 
+  border-color: var(--color-border-secondary);
+}
+.btn--ghost:hover { 
+  background: var(--color-background-secondary); 
+  border-color: var(--color-border-primary);
+}
+.btn:disabled { 
+  opacity: .4; 
+  cursor: not-allowed; 
+  box-shadow: none;
+}
+
+/* Boutons Icônes de Ligne */
+.btn-icon {
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  padding: 6px;
+  border-radius: 8px; 
+  color: var(--color-text-secondary);
+  font-size: 18px; 
+  display: flex; 
+  align-items: center;
+  transition: all 0.15s;
+}
+.btn-icon:hover { 
+  background: var(--color-background-secondary); 
+  color: var(--color-text-primary);
+}
+
+/* ── Zone Vide Épurée (Empty State) ── */
+.empty-state {
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  gap: 1rem; 
+  padding: 4rem 2rem; 
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+.empty-state .ti { 
+  font-size: 2.5rem; 
+  color: var(--color-text-secondary);
+  opacity: .4; 
+  background: var(--color-background-secondary);
+  padding: 16px;
+  border-radius: 50%;
+  margin-bottom: 0.25rem;
+  
+}

@@ -1,0 +1,364 @@
+/* ── Layout Global Épuré ── */
+.page-layout { 
+  display: flex; 
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, var(--color-background-secondary), var(--color-background-tertiary)); 
+}
+.page-main { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden; 
+}
+.page-content { 
+  flex: 1; 
+  padding: 2rem 2.5rem; 
+  overflow-y: auto; 
+}
+
+/* ── En-tête Premium ── */
+.page-header { 
+  margin-bottom: 2.25rem; 
+}
+.page-title {
+  font-size: 1.65rem; 
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary); 
+  margin: 0;
+}
+.page-subtitle {
+  font-size: .9rem; 
+  color: var(--color-text-secondary); 
+  margin: .35rem 0 0;
+  opacity: 0.8;
+}
+
+/* ── Grille Deux Colonnes Asymétrique ── */
+.transfers-layout {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 950px) {
+  .transfers-layout { grid-template-columns: 1fr; }
+  .page-content { padding: 1.5rem; }
+}
+
+/* ── Panneaux & Cartes Chic ── */
+.panel {
+  background: var(--color-background-primary);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 
+              0 12px 24px -4px rgba(0, 0, 0, 0.04);
+  border-radius: 18px; 
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.panel:hover {
+  box-shadow: 0 6px 12px -1px rgba(0, 0, 0, 0.03), 
+              0 16px 32px -4px rgba(0, 0, 0, 0.06);
+}
+.panel__header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+}
+.panel__title {
+  font-size: 1.05rem; 
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary); 
+  margin: 0;
+}
+.panel__body { 
+  padding: 1.5rem; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.25rem; 
+}
+
+/* ── Aperçu Solde Card-Style ── */
+.balance-preview {
+  background: var(--color-background-tertiary);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  display: flex; 
+  flex-direction: column; 
+  gap: .6rem;
+}
+.balance-preview__row {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+}
+.balance-preview__label {
+  font-size: .75rem; 
+  font-weight: 600;
+  text-transform: uppercase; 
+  letter-spacing: .08em;
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+}
+.balance-preview__value {
+  font-size: 1.05rem; 
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.balance-preview__value--danger { 
+  color: #ef4444; 
+}
+
+/* ── Formulaire & Inputs SaaS ── */
+form { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.1rem; 
+}
+.form-group { 
+  display: flex; 
+  flex-direction: column; 
+  gap: .5rem; 
+}
+.form-label {
+  font-size: .85rem; 
+  font-weight: 500; 
+  color: var(--color-text-primary);
+  display: flex; 
+  align-items: center; 
+  gap: .25rem;
+}
+.required { 
+  color: #ef4444; 
+  font-weight: 600;
+}
+.form-error { 
+  font-size: .78rem; 
+  font-weight: 500;
+  color: #ef4444; 
+  margin-top: 0.1rem;
+}
+
+/* Vos inputs généraux héritent du style moderne */
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: .925rem;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 10px;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.form-input:focus {
+  outline: none;
+  border-color: #1A3C5E;
+  box-shadow: 0 0 0 3px rgba(26, 60, 94, 0.12);
+}
+.form-input--error { 
+  border-color: #ef4444 !important; 
+}
+.form-input--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+/* ── Champ Montant Premium (avec badge FCFA) ── */
+.input-currency { 
+  position: relative; 
+}
+.input-currency .form-input { 
+  padding-right: 4.2rem; 
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.currency-tag {
+  position: absolute; 
+  right: 12px; 
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: .78rem; 
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: var(--color-background-secondary);
+  padding: 4px 8px;
+  border-radius: 6px;
+  pointer-events: none;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* ── Boutons Corporatifs Forts ── */
+.btn {
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center; 
+  gap: .5rem;
+  padding: .8rem 1.5rem; 
+  border-radius: 12px;
+  font-size: .9rem; 
+  font-weight: 600; 
+  cursor: pointer;
+  border: 1px solid transparent; 
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1); 
+  text-decoration: none;
+}
+.btn--primary { 
+  background: #1A3C5E; 
+  color: #ffffff; 
+  box-shadow: 0 4px 12px rgba(26, 60, 94, 0.15);
+}
+.btn--primary:hover:not(:disabled) { 
+  background: #122b44;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(26, 60, 94, 0.22);
+}
+.btn--primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+.btn--primary:disabled { 
+  opacity: .4; 
+  cursor: not-allowed; 
+  box-shadow: none;
+}
+.btn--full { width: 100%; }
+
+/* ── Alertes Modernes Flottantes ── */
+.alert {
+  display: inline-flex; 
+  align-items: center; 
+  gap: .75rem;
+  padding: .9rem 1.25rem; 
+  border-radius: 12px; 
+  font-size: .9rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+.alert--success { 
+  background: #f0fdf4; 
+  color: #166534;
+  border-color: #bbf7d0;
+}
+.alert--danger { 
+  background: #fef2f2; 
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+
+/* ── Liste de Transactions Style Banque d'Affaires ── */
+.tx-list { list-style: none; margin: 0; padding: 0; }
+.tx-item {
+  display: flex; 
+  align-items: center; 
+  gap: 16px;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
+  transition: background-color 0.2s ease;
+}
+.tx-item:last-child { border-bottom: none; }
+.tx-item:hover { 
+  background: linear-gradient(to right, var(--color-background-secondary), transparent); 
+}
+
+.tx-icon {
+  width: 42px; 
+  height: 42px; 
+  border-radius: 10px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-size: 18px; 
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+.tx-icon--transfer {
+  background: rgba(14, 165, 233, 0.08); 
+  color: #0ea5e9;
+}
+
+.tx-info { flex: 1; min-width: 0; }
+.tx-desc {
+  font-size: .925rem; 
+  font-weight: 600; 
+  color: var(--color-text-primary);
+  margin: 0; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+.tx-meta {
+  font-size: .78rem; 
+  color: var(--color-text-secondary);
+  margin: 4px 0 0; 
+  font-family: var(--font-mono);
+  opacity: 0.85;
+}
+.tx-date { 
+  font-size: .75rem; 
+  color: var(--color-text-secondary); 
+  margin: 4px 0 0; 
+  opacity: 0.7;
+}
+
+.tx-amount {
+  font-size: .95rem; 
+  font-weight: 600;
+  color: var(--color-text-primary); 
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* ── Shimmer / Skeleton Loader Fluide ── */
+.skeleton-rows { 
+  padding: .75rem 1.5rem; 
+  display: flex; 
+  flex-direction: column; 
+  gap: .75rem; 
+}
+.skeleton-row {
+  height: 56px; 
+  border-radius: 12px;
+  background: linear-gradient(90deg, 
+    var(--color-background-secondary) 25%, 
+    var(--color-background-tertiary) 50%, 
+    var(--color-background-secondary) 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.6s infinite linear;
+}
+@keyframes loading-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Empty State Minimaliste ── */
+.empty-state {
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  gap: 1rem; 
+  padding: 4rem 2rem; 
+  color: var(--color-text-secondary); 
+  font-size: .9rem;
+}
+.empty-state .ti { 
+  font-size: 2.5rem; 
+  color: var(--color-text-secondary);
+  opacity: .4; 
+  background: var(--color-background-secondary);
+  padding: 16px;
+  border-radius: 50%;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Spinner de Chargement Micro-interactif ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { 
+  animation: spin .6s linear infinite; 
+  display: inline-block; 
+}

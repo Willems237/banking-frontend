@@ -1,0 +1,203 @@
+<section class="admin-page">
+
+  <!-- ══════ EN-TÊTE ══════ -->
+  <header class="admin-page__header">
+    <div>
+      <h1 class="admin-page__title">Tableau de bord Admin</h1>
+      <p class="admin-page__subtitle">Gestion des utilisateurs Axioma</p>
+    </div>
+    <button class="btn btn--primary" (click)="openCreateModal()">
+      <i class="ti ti-user-plus" aria-hidden="true"></i>
+      Nouveau personnel
+    </button>
+  </header>
+
+  <!-- ══════ ALERTES ══════ -->
+  <div class="alert alert--success" *ngIf="success" role="alert">
+    <i class="ti ti-circle-check" aria-hidden="true"></i> {{ success }}
+  </div>
+  <div class="alert alert--danger" *ngIf="error" role="alert">
+    <i class="ti ti-alert-circle" aria-hidden="true"></i> {{ error }}
+  </div>
+
+  <!-- ══════ STATS ══════ -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-card__label">Total utilisateurs</span>
+      <span class="stat-card__value">{{ totalUsers }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">Clients</span>
+      <span class="stat-card__value">{{ totalCustomers }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">Gestionnaires</span>
+      <span class="stat-card__value">{{ totalManagers }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">Administrateurs</span>
+      <span class="stat-card__value">{{ totalAdmins }}</span>
+    </div>
+  </div>
+
+  <!-- ══════ TABLEAU UTILISATEURS ══════ -->
+  <div class="table-card">
+
+    <div class="skeleton-rows" *ngIf="loading">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
+    </div>
+
+    <table class="data-table" *ngIf="!loading && users.length > 0">
+      <thead>
+        <tr>
+          <th>Utilisateur</th>
+          <th>Rôle</th>
+          <th>Email</th>
+          <th>Statut</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users; trackBy: trackById">
+
+          <td class="user-cell">
+            <div class="user-avatar">
+              {{ user.username.charAt(0).toUpperCase() }}
+            </div>
+            <div>
+              <p class="user-name">{{ user.username }}</p>
+              <p class="user-sub">
+                {{ user.first_name }} {{ user.last_name }}
+              </p>
+            </div>
+          </td>
+
+          <td>
+            <span class="badge"
+              [ngClass]="getRoleBadgeClass(user.profile?.role ?? '')">
+              {{ getRoleLabel(user.profile?.role ?? '') }}
+            </span>
+          </td>
+
+          <td class="text--muted">{{ user.email }}</td>
+
+          <td>
+            <span class="badge"
+              [ngClass]="user.is_active ? 'badge--success' : 'badge--neutral'">
+              {{ user.is_active ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+
+          <td>
+            <button
+              class="btn btn--sm"
+              [ngClass]="user.is_active ? 'btn--ghost' : 'btn--primary'"
+              (click)="toggleUserStatus(user)"
+            >
+              {{ user.is_active ? 'Désactiver' : 'Activer' }}
+            </button>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty-state" *ngIf="!loading && users.length === 0">
+      <i class="ti ti-users" aria-hidden="true"></i>
+      <p>Aucun utilisateur trouvé.</p>
+    </div>
+
+  </div>
+
+
+  <!-- ══════ MODALE CRÉATION ══════ -->
+  <div class="modal-overlay" *ngIf="showCreateModal" (click)="closeCreateModal()">
+    <div class="modal" role="dialog" aria-modal="true"
+         aria-labelledby="modal-staff-title"
+         (click)="$event.stopPropagation()">
+
+      <header class="modal__header">
+        <h2 id="modal-staff-title">Créer un compte personnel</h2>
+        <button class="btn-icon" (click)="closeCreateModal()" aria-label="Fermer">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <form class="modal__body" [formGroup]="staffForm"
+            (ngSubmit)="onCreateStaff()">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="username">Nom d'utilisateur</label>
+            <input id="username" type="text" class="form-input"
+              formControlName="username"
+              [class.form-input--error]="usernameCtrl?.invalid && usernameCtrl?.touched"
+              placeholder="john_doe" />
+            <span class="form-error"
+              *ngIf="usernameCtrl?.invalid && usernameCtrl?.touched">
+              Minimum 3 caractères.
+            </span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input id="email" type="email" class="form-input"
+              formControlName="email"
+              [class.form-input--error]="emailCtrl?.invalid && emailCtrl?.touched"
+              placeholder="john@axioma.com" />
+            <span class="form-error"
+              *ngIf="emailCtrl?.invalid && emailCtrl?.touched">
+              Email invalide.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="password">Mot de passe</label>
+            <input id="password" type="password" class="form-input"
+              formControlName="password"
+              [class.form-input--error]="passwordCtrl?.invalid && passwordCtrl?.touched"
+              placeholder="Minimum 8 caractères" />
+            <span class="form-error"
+              *ngIf="passwordCtrl?.invalid && passwordCtrl?.touched">
+              Minimum 8 caractères.
+            </span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">Téléphone</label>
+            <input id="phone" type="tel" class="form-input"
+              formControlName="phone_number"
+              placeholder="+237 6XX XXX XXX" />
+          </div>
+        </div>
+
+        <!-- Rôle -->
+        <div class="form-group">
+          <label class="form-label">Rôle</label>
+          <div class="type-selector">
+            <label class="type-option"
+              *ngFor="let opt of roleOptions"
+              [class.type-option--selected]="roleCtrl?.value === opt.value">
+              <input type="radio" formControlName="role"
+                [value]="opt.value" class="sr-only" />
+              {{ opt.label }}
+            </label>
+          </div>
+        </div>
+
+        <footer class="modal__footer">
+          <button type="button" class="btn btn--ghost"
+            (click)="closeCreateModal()">Annuler</button>
+          <button type="submit" class="btn btn--primary"
+            [disabled]="staffForm.invalid || submitting">
+            <i class="ti ti-loader-2 spin" *ngIf="submitting"
+               aria-hidden="true"></i>
+            {{ submitting ? 'Création...' : 'Créer' }}
+          </button>
+        </footer>
+
+      </form>
+    </div>
+  </div>
+
+</section>

@@ -1,0 +1,214 @@
+<div class="page-layout">
+    <app-sidebar />
+   
+    <main class="page-main">
+      <app-navbar />
+   
+      <div class="page-content">
+   
+        <!-- ══════ EN-TÊTE ══════ -->
+        <header class="page-header">
+          <div>
+            <h1 class="page-title">Transactions</h1>
+            <p class="page-subtitle">
+              Historique complet de vos opérations bancaires
+            </p>
+          </div>
+        </header>
+   
+        <!-- ══════ STATS RAPIDES ══════ -->
+        <div class="stats-row" *ngIf="!loading && transactions.length > 0">
+          <div class="stat-pill stat-pill--credit">
+            <i class="ti ti-trending-up" aria-hidden="true"></i>
+            <span class="stat-pill__label">Crédits</span>
+            <span class="stat-pill__value">+ {{ formatAmount(totalCredit.toString()) }}</span>
+          </div>
+          <div class="stat-pill stat-pill--debit">
+            <i class="ti ti-trending-down" aria-hidden="true"></i>
+            <span class="stat-pill__label">Débits</span>
+            <span class="stat-pill__value">- {{ formatAmount(totalDebit.toString()) }}</span>
+          </div>
+          <div class="stat-pill">
+            <i class="ti ti-list-numbers" aria-hidden="true"></i>
+            <span class="stat-pill__label">Total</span>
+            <span class="stat-pill__value">{{ totalCount }} opération{{ totalCount > 1 ? 's' : '' }}</span>
+          </div>
+        </div>
+   
+        <!-- ══════ ALERTES ══════ -->
+        <div class="alert alert--danger" *ngIf="error" role="alert">
+          <i class="ti ti-alert-circle" aria-hidden="true"></i> {{ error }}
+        </div>
+   
+        <!-- ══════ FILTRES ══════ -->
+        <div class="filters-card" [formGroup]="filterForm">
+          <div class="filters-card__row">
+   
+            <!-- Type -->
+            <div class="filter-group">
+              <label class="filter-label" for="filter-type">
+                <i class="ti ti-filter" aria-hidden="true"></i>
+                Type
+              </label>
+              <select id="filter-type" class="filter-select"
+                      formControlName="type">
+                <option *ngFor="let opt of typeOptions"
+                        [value]="opt.value">
+                  {{ opt.label }}
+                </option>
+              </select>
+            </div>
+   
+            <!-- Compte -->
+            <div class="filter-group">
+              <label class="filter-label" for="filter-account">
+                <i class="ti ti-credit-card" aria-hidden="true"></i>
+                Compte
+              </label>
+              <select id="filter-account" class="filter-select"
+                      formControlName="account">
+                <option value="">Tous les comptes</option>
+                <option *ngFor="let acc of accounts" [value]="acc.id">
+                  {{ acc.label }} — {{ acc.account_number }}
+                </option>
+              </select>
+            </div>
+   
+            <!-- Reset -->
+            <button
+              class="btn btn--ghost btn--sm"
+              (click)="clearFilters()"
+              *ngIf="hasActiveFilters"
+              type="button"
+            >
+              <i class="ti ti-x" aria-hidden="true"></i>
+              Effacer
+            </button>
+   
+          </div>
+        </div>
+   
+        <!-- ══════ SKELETON ══════ -->
+        <div class="tx-card" *ngIf="loading">
+          <div class="skeleton-rows">
+            <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5,6,7]"></div>
+          </div>
+        </div>
+   
+        <!-- ══════ TABLEAU ══════ -->
+        <div class="tx-card" *ngIf="!loading && transactions.length > 0">
+          <table class="tx-table">
+            <thead>
+              <tr>
+                <th>Opération</th>
+                <th>Compte</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th class="col-amount">Montant</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tx of transactions; trackBy: trackById"
+                  class="tx-row">
+   
+                <!-- Type + description -->
+                <td>
+                  <div class="tx-type-cell">
+                    <div class="tx-icon" [ngClass]="getAmountClass(tx.type)">
+                      <i class="ti" [ngClass]="getTypeIcon(tx.type)"
+                         aria-hidden="true"></i>
+                    </div>
+                    <div>
+                      <p class="tx-type-label">{{ getTypeLabel(tx.type) }}</p>
+                      <p class="tx-desc">
+                        {{ tx.description || '—' }}
+                      </p>
+                    </div>
+                  </div>
+                </td>
+   
+                <!-- Compte -->
+                <td>
+                  <code class="account-num">{{ tx.account_number }}</code>
+                </td>
+   
+                <!-- Date -->
+                <td class="tx-date">{{ formatDate(tx.date) }}</td>
+   
+                <!-- Statut -->
+                <td>
+                  <span class="badge" [ngClass]="getStatusClass(tx.status)">
+                    {{ getStatusLabel(tx.status) }}
+                  </span>
+                </td>
+   
+                <!-- Montant -->
+                <td class="col-amount">
+                  <span class="tx-amount" [ngClass]="getAmountClass(tx.type)">
+                    {{ getAmountClass(tx.type) === 'amount--credit' ? '+' : '-' }}
+                    {{ formatAmount(tx.amount) }}
+                  </span>
+                </td>
+   
+              </tr>
+            </tbody>
+          </table>
+        </div>
+   
+        <!-- ══════ ÉTAT VIDE ══════ -->
+        <div class="empty-state"
+             *ngIf="!loading && transactions.length === 0">
+          <div class="empty-state__icon" aria-hidden="true">
+            <i class="ti ti-inbox"></i>
+          </div>
+          <p class="empty-state__title">Aucune transaction trouvée</p>
+          <p class="empty-state__hint" *ngIf="hasActiveFilters">
+            Essayez de modifier ou d'effacer les filtres.
+          </p>
+          <p class="empty-state__hint" *ngIf="!hasActiveFilters">
+            Vos transactions apparaîtront ici après vos premières opérations.
+          </p>
+          <button
+            class="btn btn--ghost btn--sm"
+            (click)="clearFilters()"
+            *ngIf="hasActiveFilters"
+          >
+            <i class="ti ti-x" aria-hidden="true"></i>
+            Effacer les filtres
+          </button>
+        </div>
+   
+        <!-- ══════ PAGINATION ══════ -->
+        <nav class="pagination"
+             *ngIf="totalPages > 1"
+             aria-label="Pagination des transactions">
+   
+          <button class="page-btn"
+                  (click)="goToPage(currentPage - 1)"
+                  [disabled]="currentPage === 1"
+                  aria-label="Page précédente">
+            <i class="ti ti-chevron-left" aria-hidden="true"></i>
+          </button>
+   
+          <button
+            class="page-btn"
+            *ngFor="let p of pages"
+            [class.page-btn--active]="p === currentPage"
+            (click)="goToPage(p)"
+            [attr.aria-current]="p === currentPage ? 'page' : null"
+          >
+            {{ p }}
+          </button>
+   
+          <button class="page-btn"
+                  (click)="goToPage(currentPage + 1)"
+                  [disabled]="currentPage === totalPages"
+                  aria-label="Page suivante">
+            <i class="ti ti-chevron-right" aria-hidden="true"></i>
+          </button>
+   
+        </nav>
+   
+      </div>
+    </main>
+  </div>

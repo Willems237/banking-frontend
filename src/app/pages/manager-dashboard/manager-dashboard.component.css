@@ -1,0 +1,336 @@
+/* ── Container Global & Structure ── */
+.manager-page { 
+  padding: 2.5rem 2rem; 
+  max-width: 1250px; 
+  margin: 0 auto;
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.75rem; 
+}
+
+.manager-page__header { 
+  margin-bottom: .25rem; 
+}
+.manager-page__title {
+  font-size: 1.65rem; 
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary); 
+  margin: 0;
+}
+.manager-page__subtitle {
+  font-size: .9rem; 
+  color: var(--color-text-secondary); 
+  margin: .35rem 0 0;
+  opacity: 0.85;
+}
+
+/* ── Cartes de Statistiques (Grid Épuré) ── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+.stat-card {
+  background: var(--color-background-primary);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  border-radius: 16px;
+  padding: 1.25rem; 
+  display: flex; 
+  flex-direction: column; 
+  gap: .5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+}
+.stat-card__label {
+  font-size: 12px; 
+  font-weight: 600; 
+  text-transform: uppercase;
+  letter-spacing: .08em; 
+  color: var(--color-text-secondary);
+  opacity: 0.8;
+}
+.stat-card__value {
+  font-size: 1.8rem; 
+  font-weight: 600; 
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.stat--success { color: #166534 !important; }
+.stat--danger  { color: #991b1b !important; }
+
+/* ── Barre de Recherche Fluide & Moderne ── */
+.search-bar {
+  display: flex; 
+  align-items: center; 
+  gap: .85rem;
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 12px;
+  padding: .65rem 1.1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-bar:focus-within {
+  border-color: #1A3C5E;
+  box-shadow: 0 0 0 3px rgba(26, 60, 94, 0.12);
+}
+.search-bar .ti { 
+  color: var(--color-text-secondary); 
+  font-size: 18px; 
+}
+.search-input {
+  flex: 1; 
+  border: none; 
+  background: transparent;
+  outline: none; 
+  font-size: .925rem;
+  color: var(--color-text-primary);
+}
+.search-input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+.search-count {
+  font-size: .8rem; 
+  font-weight: 500;
+  color: var(--color-text-secondary); 
+  background: var(--color-background-secondary);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* ── Tableau Haute Fidélité (Data Table) ── */
+.table-card {
+  background: var(--color-background-primary);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 
+              0 12px 24px -4px rgba(0, 0, 0, 0.04);
+  border-radius: 20px; 
+  overflow: hidden;
+}
+.data-table { 
+  width: 100%; 
+  border-collapse: collapse; 
+  font-size: .9rem; 
+}
+.data-table th {
+  padding: 1.1rem 1.25rem; 
+  text-align: left; 
+  font-size: .75rem;
+  font-weight: 600; 
+  text-transform: uppercase; 
+  letter-spacing: .08em;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border-tertiary);
+  background: var(--color-background-tertiary);
+}
+.data-table td {
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
+  color: var(--color-text-primary);
+  vertical-align: middle;
+  transition: background-color 0.15s ease;
+}
+.data-table tr:last-child td { 
+  border-bottom: none; 
+}
+.data-table tr:hover td { 
+  background: linear-gradient(to right, var(--color-background-secondary), transparent); 
+}
+
+/* Identifiants Mono */
+.account-num {
+  font-family: var(--font-mono); 
+  font-size: .78rem;
+  font-weight: 500;
+  background: var(--color-background-tertiary);
+  padding: 4px 8px; 
+  border-radius: 6px;
+  color: var(--color-text-primary);
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+.text--muted { 
+  color: var(--color-text-secondary); 
+  opacity: 0.85;
+}
+.text--mono { 
+  font-family: var(--font-mono); 
+  font-size: .85rem; 
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Badges Satinés Discrets ── */
+.badge {
+  display: inline-flex; 
+  align-items: center;
+  padding: 4px 10px; 
+  border-radius: 8px;
+  font-size: 11px; 
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: 1px solid transparent;
+}
+.badge--success { 
+  background: #f0fdf4; 
+  color: #166534;
+  border-color: #bbf7d0;
+}
+.badge--danger { 
+  background: #fef2f2; 
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+.badge--type { 
+  background: var(--color-background-tertiary); 
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-tertiary);
+}
+
+/* ── Boutons d'Action Professionnels ── */
+.btn {
+  display: inline-flex; 
+  align-items: center; 
+  gap: .45rem;
+  border-radius: 8px; 
+  font-size: .82rem;
+  font-weight: 600; 
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn--sm { 
+  padding: .5rem .9rem; 
+}
+.btn--freeze {
+  background: #fffbeb;
+  color: #d97706;
+  border-color: #fde68a;
+}
+.btn--freeze:hover:not(:disabled) {
+  background: #fef3c7;
+  border-color: #f59e0b;
+}
+.btn--activate {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+.btn--activate:hover:not(:disabled) {
+  background: #dcfce7;
+  border-color: #22c55e;
+}
+.btn:disabled { 
+  opacity: .4; 
+  cursor: not-allowed; 
+}
+
+/* ── Pagination Segmentée Haute Performance ── */
+.pagination {
+  display: flex; 
+  align-items: center;
+  justify-content: center; 
+  gap: .5rem;
+  margin-top: 0.5rem;
+}
+.page-btn {
+  width: 38px; 
+  height: 38px; 
+  border-radius: 10px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border-secondary);
+  font-size: .875rem; 
+  font-weight: 500;
+  cursor: pointer; 
+  color: var(--color-text-primary);
+  transition: all .2s;
+}
+.page-btn:hover:not(:disabled) { 
+  background: var(--color-background-secondary); 
+  border-color: var(--color-border-primary);
+}
+.page-btn--active {
+  background: #1A3C5E; 
+  color: #fff; 
+  border-color: #1A3C5E;
+  box-shadow: 0 4px 10px rgba(26, 60, 94, 0.2);
+}
+.page-btn:disabled { 
+  opacity: .35; 
+  cursor: not-allowed; 
+}
+
+/* ── Skeleton Shimmer Fluide (Chargement) ── */
+.skeleton-rows { 
+  padding: 1rem; 
+  display: flex; 
+  flex-direction: column; 
+  gap: .75rem; 
+}
+.skeleton-row {
+  height: 48px; 
+  border-radius: 10px;
+  background: linear-gradient(90deg, 
+    var(--color-background-secondary) 25%, 
+    var(--color-background-tertiary) 50%, 
+    var(--color-background-secondary) 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite linear;
+}
+@keyframes loading-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Alertes Chics ── */
+.alert {
+  display: flex; 
+  align-items: center; 
+  gap: .75rem;
+  padding: .9rem 1.25rem; 
+  border-radius: 12px; 
+  font-size: .9rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+.alert--success { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.alert--danger  { background: #fef2f2; color: #991b1b; border-color: #fca5a5; }
+
+/* ── Empty State Minimaliste ── */
+.empty-state {
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  gap: 1rem; 
+  padding: 4rem 2rem; 
+  color: var(--color-text-secondary); 
+  font-size: .9rem;
+  text-align: center;
+}
+.empty-state .ti { 
+  font-size: 2.5rem; 
+  color: var(--color-text-secondary);
+  opacity: .4; 
+  background: var(--color-background-secondary);
+  padding: 16px;
+  border-radius: 50%;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Responsive Fluide ── */
+@media (max-width: 900px) {
+  .manager-page { padding: 1.5rem 1rem; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .data-table th:nth-child(3), .data-table td:nth-child(3) { display: none; } /* Cache les colonnes secondaires */
+}

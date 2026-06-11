@@ -1,0 +1,69 @@
+
+<article [class]="cardClass" *ngIf="account">
+ 
+    <header class="account-card__header">
+      <div class="account-card__type">
+        <span class="account-card__icon" aria-hidden="true">{{ accountIcon }}</span>
+        <span class="account-card__type-label">{{ accountTypeLabel }}</span>
+      </div>
+      <span class="badge" [ngClass]="statusClass">
+        {{ account.is_active ? 'Actif' : 'Inactif' }}
+      </span>
+    </header>
+   
+    <section class="account-card__balance">
+      <span class="account-card__balance-label">Solde disponible</span>
+      <div class="account-card__balance-row">
+        <span class="account-card__balance-amount">
+          {{ balanceVisible ? formattedBalance : '••••• FCFA' }}
+        </span>
+        <button
+          class="btn-icon"
+          (click)="toggleBalance()"
+          [attr.aria-label]="balanceVisible ? 'Masquer le solde' : 'Afficher le solde'"
+          type="button"
+        >
+          <i [class]="balanceVisible ? 'ti ti-eye-off' : 'ti ti-eye'" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+   
+    <section class="account-card__number">
+      <span class="account-card__number-label">Numéro de compte</span>
+      <div class="account-card__number-row">
+        <code class="account-card__number-value">{{ maskedNumber }}</code>
+        <button
+          class="btn-icon"
+          (click)="copyAccountNumber()"
+          aria-label="Copier le numéro de compte"
+          type="button"
+        >
+          <i class="ti ti-copy" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+   
+    <footer class="account-card__actions" *ngIf="showActions && !compact">
+      <a
+        [routerLink]="['/transactions']"
+        [queryParams]="{ account: account.id }"
+        class="btn btn--ghost btn--sm"
+      >
+        Historique
+      </a>
+      <a
+        [routerLink]="['/transfers']"
+        [queryParams]="{ from: account.id }"
+        class="btn btn--primary btn--sm"
+      >
+        Virer
+      </a>
+    </footer>
+   
+  </article>
+   
+  <div class="account-card account-card--empty" *ngIf="!account">
+    <i class="ti ti-building-bank" style="font-size: 2rem; opacity: .3;" aria-hidden="true"></i>
+    <p class="account-card__empty-text">Aucun compte disponible</p>
+  </div>
+   

@@ -1,0 +1,67 @@
+<aside class="sidebar" [class.sidebar--collapsed]="collapsed"
+       role="navigation" aria-label="Navigation principale">
+
+  <!-- ══════ LOGO ══════ -->
+  <div class="sidebar__logo">
+    <div class="sidebar__logo-icon" aria-hidden="true">
+      <i class="ti ti-building-bank"></i>
+    </div>
+    <span class="sidebar__logo-text" *ngIf="!collapsed">Axioma</span>
+    <button class="sidebar__collapse-btn"
+            (click)="toggleCollapse()"
+            [attr.aria-label]="collapsed ? 'Déplier' : 'Réduire'">
+      <i class="ti"
+         [ngClass]="collapsed ? 'ti-chevron-right' : 'ti-chevron-left'"
+         aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <!-- ══════ PROFIL MINI ══════ -->
+  <div class="sidebar__profile" *ngIf="!collapsed && currentUser">
+    <div class="profile-avatar">{{ userInitials }}</div>
+    <div class="profile-info">
+      <p class="profile-name">{{ displayName }}</p>
+      <p class="profile-role">{{ roleLabel }}</p>
+    </div>
+  </div>
+  <div class="sidebar__profile sidebar__profile--mini"
+       *ngIf="collapsed && currentUser">
+    <div class="profile-avatar profile-avatar--sm"
+         [title]="displayName">{{ userInitials }}</div>
+  </div>
+
+  <!-- ══════ NAVIGATION ══════ -->
+  <nav class="sidebar__nav">
+    <ul role="list">
+      <li *ngFor="let item of filteredMenuItems">
+        <!-- ✅ Ajout de la balise ouvrante "<a" oubliée ici -->
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="nav-item--active"
+          class="nav-item"
+          [title]="collapsed ? item.title : ''"
+          [attr.aria-label]="item.title"
+        >
+          <i class="ti" [ngClass]="item.icon" aria-hidden="true"></i>
+          <span class="nav-item__label" *ngIf="!collapsed">
+            {{ item.title }}
+          </span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ══════ DÉCONNEXION ══════ -->
+  <div class="sidebar__footer">
+    <button class="nav-item nav-item--logout"
+            (click)="logout()"
+            [title]="collapsed ? 'Se déconnecter' : ''"
+            aria-label="Se déconnecter">
+      <i class="ti ti-logout" aria-hidden="true"></i>
+      <span class="nav-item__label" *ngIf="!collapsed">
+        Déconnexion
+      </span>
+    </button>
+  </div>
+
+</aside>

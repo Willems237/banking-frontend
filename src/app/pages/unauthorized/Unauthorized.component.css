@@ -1,0 +1,145 @@
+.unauth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  /* Dégradé discret pour un fond de page haut de gamme */
+  background: radial-gradient(circle at top right, var(--color-background-secondary), var(--color-background-tertiary));
+}
+
+.unauth-card {
+  background: var(--color-background-primary);
+  /* Ligne de contour ultra-fine et ombre douce multicouche */
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03), 
+              0 20px 40px -4px rgba(0, 0, 0, 0.05);
+  border-radius: 24px; /* Coins plus arrondis pour un aspect moderne */
+  padding: 3.5rem 2.5rem;
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.unauth-card:hover {
+  transform: translateY(-2px); /* Léger effet de flottaison au survol */
+}
+
+/* ── Icône Premium ── */
+.unauth-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px; /* Carré aux coins très arrondis style iOS */
+  background: rgba(239, 68, 68, 0.08); /* Rouge ultra-léger et transparent */
+  color: #ef4444; /* Rouge vif moderne */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Typographie ── */
+.unauth-title {
+  font-size: 1.5rem;
+  font-weight: 600; /* Plus de caractère */
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.unauth-message {
+  font-size: 0.925rem;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* ── Badge Rôle Épuré ── */
+.unauth-role {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--color-background-tertiary);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  margin: 0.25rem 0;
+}
+
+.role-label {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.role-badge {
+  background: #fef3c7; /* Fond ambre doux */
+  color: #d97706; /* Texte ambre foncé pour le contraste */
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 0.725rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Boutons Chics ── */
+.unauth-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem; /* Boutons plus généreux */
+  border-radius: 14px;
+  font-size: 0.875rem;
+  font-weight: 600; /* Écriture plus affirmée */
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+
+.btn--primary {
+  background: #1A3C5E;
+  color: #ffffff;
+  border-color: #1A3C5E;
+  box-shadow: 0 4px 12px rgba(26, 60, 94, 0.15); /* Ombre portée sous le bouton principal */
+}
+
+.btn--primary:hover {
+  background: #122b44;
+  border-color: #122b44;
+  box-shadow: 0 6px 16px rgba(26, 60, 94, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-primary);
+  border-color: var(--color-border-secondary);
+}
+
+.btn--ghost:hover {
+  background: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-primary);
+}

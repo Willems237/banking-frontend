@@ -1,0 +1,366 @@
+/* ── Layout Global Premium ── */
+.page-layout { 
+  display: flex; 
+  min-height: 100vh;
+  background: radial-gradient(circle at top right, var(--color-background-secondary), var(--color-background-tertiary)); 
+}
+.page-main { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden; 
+}
+.page-content {
+  flex: 1; 
+  padding: 2rem 2.5rem; 
+  overflow-y: auto;
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.5rem;
+  max-width: 800px; /* Légèrement élargi pour un meilleur confort de lecture */
+}
+   
+/* ── En-tête avec Alignement Précis ── */
+.page-header {
+  display: flex; 
+  align-items: center; /* Aligné au centre pour harmoniser avec le bouton */
+  justify-content: space-between; 
+  gap: 1rem;
+}
+.page-title {
+  font-size: 1.65rem; 
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary); 
+  margin: 0;
+}
+.page-subtitle {
+  font-size: .9rem; 
+  color: var(--color-text-secondary);
+  margin: .35rem 0 0; 
+  display: flex; 
+  align-items: center; 
+  gap: .6rem;
+  opacity: 0.85;
+}
+.unread-chip {
+  display: inline-flex; 
+  align-items: center;
+  background: #fef3c7; 
+  color: #d97706;
+  padding: 3px 10px; 
+  border-radius: 8px;
+  font-size: .75rem; 
+  font-weight: 600;
+  border: 1px solid #fde68a;
+}
+   
+/* ── Alertes Modernes Flottantes ── */
+.alert {
+  display: flex; 
+  align-items: center; 
+  gap: .75rem;
+  padding: .9rem 1.25rem; 
+  border-radius: 12px; 
+  font-size: .9rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+.alert--success { background: #f0fdf4; color: #166534; border-color: #bbf7d0; }
+.alert--danger  { background: #fef2f2; color: #991b1b; border-color: #fca5a5; }
+   
+/* ── Barre de Filtres Segmentée (Style iOS) ── */
+.filter-bar {
+  display: flex; 
+  gap: .25rem;
+  background: var(--color-background-primary);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  border-radius: 12px;
+  padding: .3rem;
+  width: fit-content;
+}
+.filter-btn {
+  display: inline-flex; 
+  align-items: center; 
+  gap: .5rem;
+  padding: .5rem 1.1rem; 
+  border-radius: 8px;
+  font-size: .85rem; 
+  font-weight: 600;
+  background: none; 
+  border: none; 
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.filter-btn:hover { 
+  background: var(--color-background-secondary); 
+  color: var(--color-text-primary); 
+}
+.filter-btn--active {
+  background: #1A3C5E; 
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(26, 60, 94, 0.15);
+}
+.filter-badge {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  padding: 2px 6px; 
+  border-radius: 6px;
+  font-size: .72rem; 
+  font-weight: 700;
+  min-width: 18px; 
+  text-align: center;
+}
+.filter-btn--active .filter-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+   
+/* ── Liste de Notifications Épurée ── */
+.notif-list {
+  list-style: none; 
+  margin: 0; 
+  padding: 0;
+  background: var(--color-background-primary);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 
+              0 12px 24px -4px rgba(0, 0, 0, 0.04);
+  border-radius: 20px;
+  overflow: hidden;
+}
+   
+/* Shimmer Loader de Haute Qualité */
+.notif-list--skeleton {
+  display: flex; 
+  flex-direction: column; 
+  background: var(--color-background-primary);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 20px;
+  overflow: hidden; 
+  padding: 1rem;
+  gap: .75rem;
+}
+.skeleton-item {
+  height: 72px; 
+  border-radius: 12px;
+  background: linear-gradient(90deg, 
+    var(--color-background-secondary) 25%, 
+    var(--color-background-tertiary) 50%, 
+    var(--color-background-secondary) 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite linear;
+}
+@keyframes loading-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+   
+/* Items & Éléments de la Liste */
+.notif-item {
+  display: flex; 
+  align-items: flex-start; 
+  gap: 16px;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
+  cursor: pointer; 
+  transition: all .2s ease;
+  position: relative;
+}
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { 
+  background: linear-gradient(to right, var(--color-background-secondary), transparent); 
+}
+   
+/* Utilisation de l'effet translucide au lieu de color-mix brut */
+.notif-item--unread {
+  background-color: rgba(26, 60, 94, 0.02);
+  border-left: 3px solid #1A3C5E;
+  padding-left: calc(1.5rem - 3px); /* Ajustement précis du padding */
+}
+.notif-item--unread:hover {
+  background-color: rgba(26, 60, 94, 0.04);
+}
+   
+/* Icônes de Notifications Profilées */
+.notif-item__icon {
+  width: 42px; 
+  height: 42px; 
+  border-radius: 12px; /* Style carré lissé premium */
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-size: 18px; 
+  flex-shrink: 0; 
+  margin-top: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.02);
+}
+.notif--success { background: rgba(22, 101, 52, 0.08);  color: #166534; }
+.notif--info    { background: rgba(14, 165, 233, 0.08); color: #0ea5e9; }
+.notif--warning { background: rgba(217, 119, 6, 0.08);  color: #d97706; }
+.notif--danger  { background: rgba(153, 27, 27, 0.08);  color: #991b1b; }
+.notif--neutral { background: var(--color-background-tertiary); color: var(--color-text-secondary); }
+   
+/* Corps des Textes */
+.notif-item__body { flex: 1; min-width: 0; }
+.notif-item__meta {
+  display: flex; 
+  align-items: center;
+  justify-content: space-between; 
+  gap: .5rem;
+  margin-bottom: .35rem;
+}
+.notif-item__type {
+  font-size: .78rem; 
+  font-weight: 600;
+  text-transform: uppercase; 
+  letter-spacing: .06em;
+  color: var(--color-text-secondary);
+  opacity: 0.85;
+}
+.notif-item__time {
+  font-size: .75rem; 
+  color: var(--color-text-secondary);
+  white-space: nowrap; 
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+.notif-item__message {
+  font-size: .925rem; 
+  color: var(--color-text-primary);
+  margin: 0; 
+  line-height: 1.55;
+}
+.notif-item--unread .notif-item__message { 
+  font-weight: 600; 
+}
+   
+/* Indicateurs Visuels de Statut */
+.notif-item__status { 
+  flex-shrink: 0; 
+  display: flex; 
+  align-items: center; 
+  margin-top: 4px; 
+}
+.notif-item__dot {
+  width: 8px; 
+  height: 8px; 
+  border-radius: 50%;
+  background: #1A3C5E;
+  box-shadow: 0 0 0 3px rgba(26, 60, 94, 0.15); /* Effet d'onde lumineuse */
+}
+.notif-item__read {
+  font-size: 16px; 
+  color: #166534;
+  opacity: 0.6;
+}
+   
+/* ── État Vide Élégant ── */
+.empty-state {
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  gap: 1rem; 
+  padding: 4.5rem 1.5rem; 
+  text-align: center;
+  background: var(--color-background-primary);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 20px;
+}
+.empty-state__icon {
+  width: 60px; 
+  height: 60px; 
+  border-radius: 50%;
+  background: var(--color-background-secondary);
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  font-size: 26px; 
+  color: var(--color-text-secondary); 
+  opacity: .6;
+  margin-bottom: 0.25rem;
+}
+.empty-state__title {
+  font-size: 1.05rem; 
+  font-weight: 600;
+  color: var(--color-text-primary); 
+  margin: 0;
+}
+.empty-state__hint {
+  font-size: .85rem; 
+  color: var(--color-text-secondary); 
+  margin: 0;
+  opacity: 0.8;
+}
+   
+/* ── Pagination Épurée ── */
+.pagination {
+  display: flex; 
+  align-items: center;
+  justify-content: center; 
+  gap: .75rem;
+  margin-top: 0.5rem;
+}
+.page-btn {
+  width: 38px; 
+  height: 38px; 
+  border-radius: 10px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border-secondary);
+  font-size: .875rem; 
+  cursor: pointer; 
+  color: var(--color-text-primary);
+  transition: all .2s;
+}
+.page-btn:hover:not(:disabled) { 
+  background: var(--color-background-secondary); 
+  border-color: var(--color-border-primary);
+}
+.page-btn:disabled { 
+  opacity: .35; 
+  cursor: not-allowed; 
+}
+.page-info { 
+  font-size: .85rem; 
+  font-weight: 500;
+  color: var(--color-text-secondary); 
+}
+   
+/* ── Boutons Corporatifs ── */
+.btn {
+  display: inline-flex; 
+  align-items: center; 
+  gap: .5rem;
+  padding: .65rem 1.25rem; 
+  border-radius: 10px;
+  font-size: .875rem; 
+  font-weight: 600; 
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all .2s; 
+  flex-shrink: 0;
+}
+.btn--ghost { 
+  background: transparent; 
+  color: var(--color-text-primary); 
+  border-color: var(--color-border-secondary);
+}
+.btn--ghost:hover { 
+  background: var(--color-background-secondary); 
+  border-color: var(--color-border-primary);
+}
+.btn:disabled { 
+  opacity: .4; 
+  cursor: not-allowed; 
+}
+   
+/* ── Media Queries Fluides ── */
+@media (max-width: 640px) {
+  .page-content { padding: 1.25rem 1rem; }
+  .page-header { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+  .btn { width: 100%; justify-content: center; }
+}

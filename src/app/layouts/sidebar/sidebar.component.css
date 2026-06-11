@@ -1,0 +1,257 @@
+/* ── Structure Principale de la Barre Latérale ── */
+.sidebar {
+  width: 240px; /* Légèrement élargi pour donner plus d'air aux intitulés */
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #1A3C5E, #0d1e30); /* Dégradé immersif */
+  display: flex;
+  flex-direction: column;
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar--collapsed {
+  width: 68px;
+}
+
+/* ── En-tête : Zone Logo Axioma ── */
+.sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: 1.25rem 1.15rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  min-height: 64px;
+}
+
+.sidebar__logo-icon {
+  width: 36px; 
+  height: 36px;
+  background: rgba(0, 200, 150, 0.08);
+  border: 1px solid rgba(0, 200, 150, 0.15);
+  border-radius: 10px; /* Carré lissé moderne */
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  color: #00C896; /* Vert signature Axioma */
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 200, 150, 0.1);
+}
+
+.sidebar__logo-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  flex: 1;
+  transition: opacity 0.2s;
+}
+
+.sidebar--collapsed .sidebar__logo-text {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Bouton pour réduire/déplier la barre */
+.sidebar__collapse-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 16px;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.sidebar__collapse-btn:hover { 
+  color: #ffffff; 
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Zone Profil Privé Satiné ── */
+.sidebar__profile {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: 1.15rem 1.15rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.01), transparent);
+}
+
+.sidebar__profile--mini {
+  justify-content: center;
+  padding: 1.15rem .5rem;
+}
+
+/* Avatar stylisé au carré adouci */
+.profile-avatar {
+  width: 38px; 
+  height: 38px;
+  border-radius: 11px; /* Uniformisation avec les icônes applicatives */
+  background: rgba(0, 200, 150, 0.1);
+  border: 1px solid rgba(0, 200, 150, 0.2);
+  color: #00C896;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-avatar--sm { 
+  width: 32px; 
+  height: 32px; 
+  font-size: 13px; 
+}
+
+.profile-info { 
+  flex: 1; 
+  min-width: 0; 
+  transition: opacity 0.2s;
+}
+
+.sidebar--collapsed .profile-info {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.profile-name {
+  font-size: .875rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
+}
+
+.profile-role {
+  font-size: .75rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 2px 0 0;
+  font-weight: 500;
+}
+
+/* ── Liste des Liens de Navigation SaaS ── */
+.sidebar__nav {
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Personnalisation de la barre de défilement discrète */
+.sidebar__nav::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar__nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+.sidebar__nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* Un peu plus d'espace entre les boutons */
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  padding: .7rem 1rem;
+  margin: 0 .5rem;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: .9rem;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: calc(100% - 1rem);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+/* Lien Actif avec Ombrage Lumineux */
+.nav-item--active {
+  background: rgba(0, 200, 150, 0.08) !important;
+  border: 1px solid rgba(0, 200, 150, 0.15);
+  color: #00C896 !important;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 200, 150, 0.05);
+}
+
+.nav-item .ti {
+  font-size: 20px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.nav-item:hover .ti {
+  transform: scale(1.05);
+}
+
+.nav-item__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.sidebar--collapsed .nav-item__label {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Zone Pied de Page : Déconnexion Seuriat ── */
+.sidebar__footer {
+  padding: .75rem .5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.nav-item--logout {
+  color: rgba(255, 255, 255, 0.5);
+}
+.nav-item--logout:hover {
+  background: rgba(239, 68, 68, 0.08) !important;
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  color: #ef4444 !important; /* Rouge alerte moderne */
+}
+.nav-item--logout:hover .ti {
+  color: #ef4444 !important;
+}
+
+/* ── Comportement Mobile Fluide et Absolu ── */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: 0; 
+    top: 0; 
+    bottom: 0;
+    z-index: 200;
+    transform: translateX(0);
+    box-shadow: 8px 0 32px rgba(0, 0, 0, 0.25);
+  }
+  .sidebar--collapsed {
+    transform: translateX(-100%); /* Masquage complet sur mobile au lieu de la bande de 60px */
+    width: 240px;
+  }
+}

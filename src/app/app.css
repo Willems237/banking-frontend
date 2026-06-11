@@ -1,0 +1,16 @@
+/* Alignement horizontal de la sidebar et du contenu de l'application */
+.app-layout {
+    display: flex;
+    margin-top: 70px; /* Aligne le début du layout juste sous les 70px de la navbar */
+  }
+  
+  /* Zone principale où s'affichent vos pages (Dashboard, Comptes...) */
+  .app-content {
+    flex-grow: 1;
+    margin-left: 260px; /* Décale le contenu pour ne pas être caché par la sidebar de 260px */
+    padding: 30px;
+    background-color: #f8fafc; /* Fond gris clair moderne pour faire ressortir les blocs */
+    min-height: calc(100vh - 70px);
+    box-sizing: border-box;
+  }
+  

@@ -1,0 +1,340 @@
+/* ── Page Comptes & Conteneur Global ── */
+.accounts-page { 
+  padding: 2.5rem 2rem; 
+  max-width: 1150px; 
+  margin: 0 auto; 
+}
+
+.accounts-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.accounts-page__title {
+  font-size: 1.65rem; 
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.accounts-page__subtitle {
+  font-size: .9rem; 
+  color: var(--color-text-secondary); 
+  margin: .35rem 0 0;
+  opacity: 0.85;
+}
+
+/* ── Grille de Cartes Bancaires Fluide ── */
+.accounts-grid, .skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── Skeleton Shimmer Premium (Chargement) ── */
+.skeleton-card {
+  height: 200px;
+  border-radius: 20px;
+  background: linear-gradient(90deg, 
+    var(--color-background-secondary) 25%, 
+    var(--color-background-tertiary) 50%, 
+    var(--color-background-secondary) 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s infinite linear;
+}
+
+@keyframes loading-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Zone Vide Épurée (Empty State) ── */
+.empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 4.5rem 2rem;
+  color: var(--color-text-secondary);
+  font-size: .9rem;
+  text-align: center;
+}
+
+.empty-state .ti { 
+  font-size: 2.5rem; 
+  color: var(--color-text-secondary);
+  opacity: .4; 
+  background: var(--color-background-secondary);
+  padding: 16px;
+  border-radius: 50%;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Alertes Modernes Satinées ── */
+.alert {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .9rem 1.25rem;
+  border-radius: 12px;
+  font-size: .9rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  border: 1px solid transparent;
+}
+
+.alert--success { 
+  background: #f0fdf4; 
+  color: #166534; 
+  border-color: #bbf7d0; 
+}
+
+.alert--danger { 
+  background: #fef2f2; 
+  color: #991b1b; 
+  border-color: #fca5a5; 
+}
+
+/* ── Modales de Création / Suppression Immersives ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4); /* Teinte ardoise sombre transparente */
+  -webkit-backdrop-filter: blur(4px); /* Effet de flou de profondeur ultra-chic pour Safari */
+  backdrop-filter: blur(4px); /* Effet de flou de profondeur ultra-chic */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+
+.modal {
+  background: var(--color-background-primary);
+  border-radius: 24px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.15);
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  animation: modal-appear 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal--sm { max-width: 400px; }
+
+@keyframes modal-appear {
+  from { transform: translateY(12px) scale(0.97); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.75rem 1rem;
+  border-bottom: 1px solid var(--color-border-tertiary);
+}
+
+.modal__header h2 {
+  font-size: 1.15rem; 
+  font-weight: 600; 
+  margin: 0; 
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+}
+
+.modal__body { 
+  padding: 1.75rem; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.25rem; 
+}
+
+.modal__footer {
+  display: flex;
+  gap: .75rem;
+  padding: 1rem 1.75rem 1.75rem;
+  justify-content: flex-end;
+  background-color: var(--color-background-tertiary);
+  border-top: 1px solid var(--color-border-tertiary);
+}
+
+/* ── Formulaires & Groupes SaaS ── */
+.form-group { 
+  display: flex; 
+  flex-direction: column; 
+  gap: .5rem; 
+}
+
+.form-label { 
+  font-size: .85rem; 
+  font-weight: 600; 
+  color: var(--color-text-primary); 
+}
+
+.form-input { 
+  width: 100%; 
+  padding: 10px 14px;
+  font-size: .925rem;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 10px;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #1A3C5E;
+  box-shadow: 0 0 0 3px rgba(26, 60, 94, 0.12);
+}
+
+.form-input--error { 
+  border-color: #ef4444 !important; 
+}
+.form-input--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.form-error { 
+  font-size: .78rem; 
+  font-weight: 500;
+  color: #ef4444; 
+  margin-top: 0.1rem;
+}
+
+/* ── Pilules de Sélection de Type de Compte ── */
+.type-selector { 
+  display: flex; 
+  gap: .5rem; 
+  flex-wrap: wrap; 
+}
+
+.type-option {
+  padding: .5rem 1.1rem; 
+  border-radius: 10px; 
+  cursor: pointer;
+  border: 1px solid var(--color-border-secondary);
+  font-size: .85rem; 
+  font-weight: 500;
+  color: var(--color-text-secondary); 
+  background-color: var(--color-background-primary);
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.type-option:hover {
+  border-color: var(--color-border-primary);
+  color: var(--color-text-primary);
+}
+
+.type-option--selected {
+  background: rgba(14, 165, 233, 0.08); 
+  border-color: #0ea5e9;
+  color: #0ea5e9; 
+  font-weight: 600;
+}
+
+/* ── Boutons Corporatifs Forts ── */
+.btn {
+  display: inline-flex; 
+  align-items: center; 
+  gap: .5rem;
+  padding: .75rem 1.5rem; 
+  border-radius: 12px;
+  font-size: .9rem; 
+  font-weight: 600; 
+  cursor: pointer;
+  border: 1px solid transparent; 
+  transition: all .2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+}
+
+.btn--primary {
+  background: #1A3C5E; 
+  color: #ffffff; 
+  border-color: #1A3C5E; 
+  box-shadow: 0 4px 12px rgba(26, 60, 94, 0.15);
+}
+.btn--primary:hover:not(:disabled) { 
+  background: #122b44;
+  border-color: #122b44;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(26, 60, 94, 0.22);
+}
+
+.btn--ghost {
+  background: transparent; 
+  color: var(--color-text-primary); 
+  border-color: var(--color-border-secondary);
+}
+.btn--ghost:hover { 
+  background: var(--color-background-secondary); 
+  border-color: var(--color-border-primary);
+}
+
+.btn--danger {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+.btn--danger:hover:not(:disabled) { 
+  background: #fee2e2;
+  border-color: #ef4444;
+  transform: translateY(-1px);
+}
+
+.btn:disabled { 
+  opacity: .4; 
+  cursor: not-allowed; 
+  box-shadow: none;
+}
+
+.btn-icon {
+  background: none; 
+  border: none; 
+  cursor: pointer; 
+  padding: 6px; 
+  border-radius: 8px;
+  color: var(--color-text-secondary); 
+  font-size: 18px;
+  display: inline-flex; 
+  align-items: center;
+  transition: all 0.15s;
+}
+.btn-icon:hover { 
+  background: var(--color-background-secondary); 
+  color: var(--color-text-primary);
+}
+
+/* ── Micro Spinner Fluide ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { 
+  animation: spin .6s linear infinite; 
+  display: inline-block; 
+}
+
+/* ── Utilitaires d'Accessibilité & Alerte ── */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}
+
+.text--danger { 
+  color: #ef4444; 
+  font-size: .875rem; 
+  font-weight: 500;
+}
+
+/* ── Responsive Fluide Mobile ── */
+@media (max-width: 640px) {
+  .accounts-page { padding: 1.5rem 1rem; }
+  .accounts-page__header { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+  .accounts-page__header .btn { justify-content: center; }
+  .accounts-grid, .skeleton-grid { grid-template-columns: 1fr; }
+}

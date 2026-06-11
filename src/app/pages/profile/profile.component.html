@@ -1,0 +1,208 @@
+<section class="profile-page">
+
+  <header class="profile-page__header">
+    <h1 class="profile-page__title">Mon profil</h1>
+    <p class="profile-page__subtitle">
+      Gérez vos informations personnelles et votre sécurité
+    </p>
+  </header>
+
+  <div class="profile-layout">
+
+    <!-- ══════ CARTE IDENTITÉ ══════ -->
+    <aside class="identity-card">
+      <div class="identity-card__avatar">
+        {{ userInitials }}
+      </div>
+      <p class="identity-card__name">
+        {{ currentUser?.first_name || '' }}
+        {{ currentUser?.last_name  || currentUser?.username }}
+      </p>
+      <p class="identity-card__email">{{ currentUser?.email }}</p>
+      <span class="badge badge--role">{{ roleLabel }}</span>
+
+      <div class="identity-card__meta">
+        <div class="meta-row">
+          <i class="ti ti-user" aria-hidden="true"></i>
+          <span>{{ currentUser?.username }}</span>
+        </div>
+        <div class="meta-row" *ngIf="currentUser?.profile?.phone_number">
+          <i class="ti ti-phone" aria-hidden="true"></i>
+          <span>{{ currentUser?.profile?.phone_number }}</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ══════ PANNEAUX ══════ -->
+    <div class="profile-panels">
+
+      <!-- Onglets -->
+      <div class="tabs" role="tablist">
+        <button
+          class="tab"
+          [class.tab--active]="activeTab === 'info'"
+          (click)="activeTab = 'info'"
+          role="tab"
+          [attr.aria-selected]="activeTab === 'info'"
+        >
+          <i class="ti ti-user-edit" aria-hidden="true"></i>
+          Informations
+        </button>
+        <button
+          class="tab"
+          [class.tab--active]="activeTab === 'password'"
+          (click)="activeTab = 'password'"
+          role="tab"
+          [attr.aria-selected]="activeTab === 'password'"
+        >
+          <i class="ti ti-lock" aria-hidden="true"></i>
+          Mot de passe
+        </button>
+      </div>
+
+      <!-- ── Onglet Informations ── -->
+      <div class="panel" *ngIf="activeTab === 'info'">
+
+        <div class="alert alert--success" *ngIf="profileSuccess" role="alert">
+          <i class="ti ti-circle-check" aria-hidden="true"></i>
+          {{ profileSuccess }}
+        </div>
+        <div class="alert alert--danger" *ngIf="profileError" role="alert">
+          <i class="ti ti-alert-circle" aria-hidden="true"></i>
+          {{ profileError }}
+        </div>
+
+        <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="first_name">Prénom</label>
+              <input id="first_name" type="text" class="form-input"
+                formControlName="first_name" placeholder="Votre prénom" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="last_name">Nom</label>
+              <input id="last_name" type="text" class="form-input"
+                formControlName="last_name" placeholder="Votre nom" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input id="email" type="email" class="form-input"
+              formControlName="email"
+              [class.form-input--error]="emailCtrl?.invalid && emailCtrl?.touched"
+              placeholder="votre@email.com" />
+            <span class="form-error"
+              *ngIf="emailCtrl?.invalid && emailCtrl?.touched">
+              Adresse email invalide.
+            </span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary"
+              [disabled]="profileForm.invalid || savingProfile">
+              <i class="ti ti-loader-2 spin" *ngIf="savingProfile"
+                 aria-hidden="true"></i>
+              {{ savingProfile ? 'Enregistrement...' : 'Enregistrer' }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- ── Onglet Mot de passe ── -->
+      <div class="panel" *ngIf="activeTab === 'password'">
+
+        <div class="alert alert--success" *ngIf="passwordSuccess" role="alert">
+          <i class="ti ti-circle-check" aria-hidden="true"></i>
+          {{ passwordSuccess }} Déconnexion dans 2s...
+        </div>
+        <div class="alert alert--danger" *ngIf="passwordError" role="alert">
+          <i class="ti ti-alert-circle" aria-hidden="true"></i>
+          {{ passwordError }}
+        </div>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()">
+
+          <!-- Ancien mot de passe -->
+          <div class="form-group">
+            <label class="form-label" for="old_pwd">Mot de passe actuel</label>
+            <div class="input-wrapper">
+              <input id="old_pwd"
+                [type]="showCurrentPwd ? 'text' : 'password'"
+                class="form-input form-input--icon-right"
+                [class.form-input--error]="oldPwdCtrl?.invalid && oldPwdCtrl?.touched"
+                formControlName="old_password"
+                placeholder="Votre mot de passe actuel" />
+              <button type="button" class="input-toggle"
+                (click)="showCurrentPwd = !showCurrentPwd"
+                [attr.aria-label]="showCurrentPwd ? 'Masquer' : 'Afficher'">
+                <i class="ti" aria-hidden="true"
+                   [ngClass]="showCurrentPwd ? 'ti-eye-off' : 'ti-eye'"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Nouveau mot de passe -->
+          <div class="form-group">
+            <label class="form-label" for="new_pwd">Nouveau mot de passe</label>
+            <div class="input-wrapper">
+              <input id="new_pwd"
+                [type]="showNewPwd ? 'text' : 'password'"
+                class="form-input form-input--icon-right"
+                [class.form-input--error]="newPwdCtrl?.invalid && newPwdCtrl?.touched"
+                formControlName="new_password"
+                placeholder="Minimum 8 caractères" />
+              <button type="button" class="input-toggle"
+                (click)="showNewPwd = !showNewPwd"
+                [attr.aria-label]="showNewPwd ? 'Masquer' : 'Afficher'">
+                <i class="ti" aria-hidden="true"
+                   [ngClass]="showNewPwd ? 'ti-eye-off' : 'ti-eye'"></i>
+              </button>
+            </div>
+            <span class="form-error"
+              *ngIf="newPwdCtrl?.invalid && newPwdCtrl?.touched">
+              Minimum 8 caractères requis.
+            </span>
+          </div>
+
+          <!-- Confirmation -->
+          <div class="form-group">
+            <label class="form-label" for="confirm_pwd">
+              Confirmer le nouveau mot de passe
+            </label>
+            <div class="input-wrapper">
+              <input id="confirm_pwd"
+                [type]="showConfirmPwd ? 'text' : 'password'"
+                class="form-input form-input--icon-right"
+                [class.form-input--error]="passwordMismatch"
+                formControlName="confirm_password"
+                placeholder="Répétez le nouveau mot de passe" />
+              <button type="button" class="input-toggle"
+                (click)="showConfirmPwd = !showConfirmPwd"
+                [attr.aria-label]="showConfirmPwd ? 'Masquer' : 'Afficher'">
+                <i class="ti" aria-hidden="true"
+                   [ngClass]="showConfirmPwd ? 'ti-eye-off' : 'ti-eye'"></i>
+              </button>
+            </div>
+            <span class="form-error" *ngIf="passwordMismatch">
+              Les mots de passe ne correspondent pas.
+            </span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary"
+              [disabled]="passwordForm.invalid || savingPassword">
+              <i class="ti ti-loader-2 spin" *ngIf="savingPassword"
+                 aria-hidden="true"></i>
+              {{ savingPassword ? 'Modification...' : 'Modifier le mot de passe' }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>

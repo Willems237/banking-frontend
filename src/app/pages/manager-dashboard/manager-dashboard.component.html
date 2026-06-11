@@ -1,0 +1,160 @@
+<section class="manager-page">
+
+  <!-- ══════ EN-TÊTE ══════ -->
+  <header class="manager-page__header">
+    <div>
+      <h1 class="manager-page__title">Espace Gestionnaire</h1>
+      <p class="manager-page__subtitle">
+        Registre global des comptes bancaires Axioma
+      </p>
+    </div>
+  </header>
+
+  <!-- ══════ ALERTES ══════ -->
+  <div class="alert alert--success" *ngIf="success" role="alert">
+    <i class="ti ti-circle-check" aria-hidden="true"></i> {{ success }}
+  </div>
+  <div class="alert alert--danger" *ngIf="error" role="alert">
+    <i class="ti ti-alert-circle" aria-hidden="true"></i> {{ error }}
+  </div>
+
+  <!-- ══════ STATS ══════ -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-card__label">Total comptes</span>
+      <span class="stat-card__value">{{ stats.totalAccounts }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">Comptes actifs</span>
+      <span class="stat-card__value stat--success">
+        {{ stats.activeAccounts }}
+      </span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">Comptes gelés</span>
+      <span class="stat-card__value stat--danger">
+        {{ stats.frozenAccounts }}
+      </span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-card__label">Fonds gérés</span>
+      <span class="stat-card__value">{{ formatAmount(stats.totalFunds) }}</span>
+    </div>
+  </div>
+
+  <!-- ══════ BARRE DE RECHERCHE ══════ -->
+  <div class="search-bar">
+    <i class="ti ti-search" aria-hidden="true"></i>
+    <input
+      type="search"
+      class="search-input"
+      placeholder="Rechercher par numéro ou client..."
+      [formControl]="searchCtrl"
+    />
+    <span class="search-count" *ngIf="!loading">
+      {{ totalCount }} résultat{{ totalCount > 1 ? 's' : '' }}
+    </span>
+  </div>
+
+  <!-- ══════ TABLEAU ══════ -->
+  <div class="table-card">
+
+    <!-- Skeleton -->
+    <div class="skeleton-rows" *ngIf="loading">
+      <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
+    </div>
+
+    <!-- Table -->
+    <table class="data-table"
+           *ngIf="!loading && accounts.length > 0">
+      <thead>
+        <tr>
+          <th>Numéro de compte</th>
+          <th>Client</th>
+          <th>Label</th>
+          <th>Type</th>
+          <th>Solde</th>
+          <th>Statut</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let acc of accounts; trackBy: trackById">
+
+          <td>
+            <code class="account-num">{{ acc.account_number }}</code>
+          </td>
+
+          <td class="text--muted">{{ acc.user }}</td>
+
+          <td>{{ acc.label }}</td>
+
+          <td>
+            <span class="badge badge--type">{{ acc.account_type }}</span>
+          </td>
+
+          <td class="text--mono">{{ formatAmount(acc.balance) }}</td>
+
+          <td>
+            <span class="badge"
+              [ngClass]="acc.is_active ? 'badge--success' : 'badge--danger'">
+              {{ acc.is_active ? 'Actif' : 'Gelé' }}
+            </span>
+          </td>
+
+          <td>
+            <button
+              class="btn btn--sm"
+              [ngClass]="acc.is_active ? 'btn--freeze' : 'btn--activate'"
+              (click)="toggleAccountStatus(acc)"
+              [disabled]="submitting"
+            >
+              <i class="ti"
+                 [ngClass]="acc.is_active ? 'ti-lock' : 'ti-lock-open'"
+                 aria-hidden="true"></i>
+              {{ acc.is_active ? 'Geler' : 'Activer' }}
+            </button>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Vide -->
+    <div class="empty-state"
+         *ngIf="!loading && accounts.length === 0">
+      <i class="ti ti-building-bank" aria-hidden="true"></i>
+      <p>Aucun compte trouvé.</p>
+    </div>
+
+  </div>
+
+  <!-- ══════ PAGINATION ══════ -->
+  <nav class="pagination" *ngIf="totalPages > 1"
+       aria-label="Pagination des comptes">
+    <button class="page-btn"
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+            aria-label="Page précédente">
+      <i class="ti ti-chevron-left" aria-hidden="true"></i>
+    </button>
+
+    <button
+      class="page-btn"
+      *ngFor="let p of pages"
+      [class.page-btn--active]="p === currentPage"
+      (click)="goToPage(p)"
+      [attr.aria-current]="p === currentPage ? 'page' : null"
+    >
+      {{ p }}
+    </button>
+
+    <button class="page-btn"
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+            aria-label="Page suivante">
+      <i class="ti ti-chevron-right" aria-hidden="true"></i>
+    </button>
+  </nav>
+
+</section>

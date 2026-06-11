@@ -1,0 +1,113 @@
+<header class="navbar" role="banner">
+
+  <!-- ══════ GAUCHE — Titre de page ══════ -->
+  <div class="navbar__left">
+    <h2 class="navbar__page-title">
+      Axioma <span class="navbar__page-title--accent">Banking</span>
+    </h2>
+  </div>
+
+  <!-- ══════ DROITE — Actions ══════ -->
+  <div class="navbar__right">
+
+    <!-- Recherche rapide (placeholder) -->
+    <button class="navbar__icon-btn" aria-label="Rechercher">
+      <i class="ti ti-search" aria-hidden="true"></i>
+    </button>
+
+    <!-- ── Notifications ── -->
+    <div class="notif-wrapper">
+
+      <button
+        class="navbar__icon-btn"
+        (click)="toggleDropdown()"
+        [attr.aria-expanded]="showDropdown"
+        aria-label="Notifications"
+        [class.navbar__icon-btn--active]="showDropdown"
+      >
+        <i class="ti ti-bell" aria-hidden="true"></i>
+        <span
+          class="notif-badge"
+          *ngIf="unreadCount > 0"
+          aria-label="{{ unreadCount }} notifications non lues"
+        >
+          {{ unreadCount > 9 ? '9+' : unreadCount }}
+        </span>
+      </button>
+
+      <!-- Dropdown notifications -->
+      <div class="notif-dropdown"
+           *ngIf="showDropdown"
+           role="dialog"
+           aria-label="Notifications">
+
+        <header class="notif-dropdown__header">
+          <span class="notif-dropdown__title">Notifications</span>
+          <button
+            class="notif-dropdown__mark-all"
+            (click)="markAllAsRead()"
+            *ngIf="unreadCount > 0"
+          >
+            Tout marquer lu
+          </button>
+        </header>
+
+        <!-- Chargement -->
+        <div class="notif-loading" *ngIf="loadingNotifs">
+          <div class="notif-skeleton"
+               *ngFor="let i of [1,2,3]"></div>
+        </div>
+
+        <!-- Liste -->
+        <ul class="notif-list"
+            *ngIf="!loadingNotifs && notifications.length > 0">
+          <li
+            class="notif-item"
+            [class.notif-item--unread]="!notif.is_read"
+            *ngFor="let notif of notifications; trackBy: trackById"
+            (click)="markAsRead(notif, $event)"
+          >
+            <div class="notif-item__icon"
+                 [ngClass]="getTypeClass(notif.type)">
+              <i class="ti" [ngClass]="getTypeIcon(notif.type)"
+                 aria-hidden="true"></i>
+            </div>
+            <div class="notif-item__body">
+              <p class="notif-item__message">{{ notif.message }}</p>
+              <p class="notif-item__time">
+                {{ getRelativeTime(notif.created_at) }}
+              </p>
+            </div>
+            <span class="notif-item__dot"
+                  *ngIf="!notif.is_read"
+                  aria-hidden="true"></span>
+          </li>
+        </ul>
+
+        <!-- Vide -->
+        <div class="notif-empty"
+             *ngIf="!loadingNotifs && notifications.length === 0">
+          <i class="ti ti-bell-off" aria-hidden="true"></i>
+          <p>Aucune notification</p>
+        </div>
+
+        <!-- Voir tout -->
+        <footer class="notif-dropdown__footer">
+          <a routerLink="/notifications"
+             (click)="showDropdown = false"
+             class="notif-dropdown__see-all">
+            Voir toutes les notifications
+          </a>
+        </footer>
+
+      </div>
+    </div>
+
+    <!-- ── Avatar utilisateur ── -->
+    <a routerLink="/profile" class="navbar__user" aria-label="Mon profil">
+      <div class="navbar__avatar">{{ userInitials }}</div>
+      <span class="navbar__username">{{ displayName }}</span>
+    </a>
+
+  </div>
+</header>

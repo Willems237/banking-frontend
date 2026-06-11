@@ -1,0 +1,167 @@
+<div class="dashboard-layout">
+  <app-sidebar />
+
+  <main class="dashboard-main">
+    <app-navbar />
+
+    <div class="dashboard-content">
+
+      <!-- ══════ CHARGEMENT ══════ -->
+      <div class="skeleton-dashboard" *ngIf="loading">
+        <div class="skeleton-stat" *ngFor="let i of [1,2,3]"></div>
+        <div class="skeleton-chart"></div>
+      </div>
+
+      <!-- ══════ ERREUR ══════ -->
+      <div class="alert alert--danger" *ngIf="error && !loading" role="alert">
+        <i class="ti ti-alert-circle" aria-hidden="true"></i> {{ error }}
+      </div>
+
+      <ng-container *ngIf="!loading && !error">
+
+        <!-- ══════ SALUTATION ══════ -->
+        <header class="dashboard-header">
+          <div>
+            <h1 class="dashboard-title">
+              {{ greeting }}, {{ currentUser?.first_name || currentUser?.username }} 👋
+            </h1>
+            <p class="dashboard-subtitle">
+              Voici un résumé de votre activité financière.
+            </p>
+          </div>
+          <a routerLink="/transfers" class="btn btn--primary">
+            <i class="ti ti-send" aria-hidden="true"></i>
+            Nouveau virement
+          </a>
+        </header>
+
+        <!-- ══════ STATS ══════ -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--blue">
+              <i class="ti ti-wallet" aria-hidden="true"></i>
+            </div>
+            <div>
+              <p class="stat-card__label">Solde total</p>
+              <p class="stat-card__value">{{ formatBalance(totalBalance) }}</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--green">
+              <i class="ti ti-trending-up" aria-hidden="true"></i>
+            </div>
+            <div>
+              <p class="stat-card__label">Entrées</p>
+              <p class="stat-card__value stat-card__value--credit">
+                {{ formatBalance(totalIncome) }}
+              </p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon stat-card__icon--red">
+              <i class="ti ti-trending-down" aria-hidden="true"></i>
+            </div>
+            <div>
+              <p class="stat-card__label">Sorties</p>
+              <p class="stat-card__value stat-card__value--debit">
+                {{ formatBalance(totalExpense) }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══════ COMPTES + GRAPHIQUE ══════ -->
+        <div class="main-grid">
+
+          <!-- Comptes -->
+          <section class="panel">
+            <header class="panel__header">
+              <h2 class="panel__title">Mes comptes</h2>
+              <a routerLink="/accounts" class="link--more">Voir tout</a>
+            </header>
+            <div class="accounts-list">
+              <app-account-card
+                *ngFor="let acc of accounts; trackBy: trackById"
+                [account]="acc"
+                [compact]="true"
+                [showActions]="false"
+              />
+              <div class="empty-state" *ngIf="accounts.length === 0">
+                <i class="ti ti-building-bank" aria-hidden="true"></i>
+                <p>Aucun compte</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Graphique -->
+          <section class="panel">
+            <header class="panel__header">
+              <h2 class="panel__title">Flux de trésorerie</h2>
+              <span class="panel__badge">12 dernières transactions</span>
+            </header>
+            <div class="chart-container"
+                 *ngIf="transactions.length > 0; else emptyChart">
+              <canvas #financialChart></canvas>
+            </div>
+            <ng-template #emptyChart>
+              <div class="empty-state">
+                <i class="ti ti-chart-line" aria-hidden="true"></i>
+                <p>Aucune transaction à afficher</p>
+              </div>
+            </ng-template>
+          </section>
+
+        </div>
+
+        <!-- ══════ TRANSACTIONS RÉCENTES ══════ -->
+        <section class="panel">
+          <header class="panel__header">
+            <h2 class="panel__title">Transactions récentes</h2>
+            <a routerLink="/transactions" class="link--more">Voir tout</a>
+          </header>
+
+          <div class="tx-empty" *ngIf="recentTransactions.length === 0">
+            <i class="ti ti-inbox" aria-hidden="true"></i>
+            <p>Aucune transaction récente</p>
+          </div>
+
+          <ul class="tx-list" *ngIf="recentTransactions.length > 0">
+            <li class="tx-item"
+                *ngFor="let tx of recentTransactions; trackBy: trackById">
+
+              <div class="tx-icon" [ngClass]="getTransactionClass(tx.type)">
+                <i class="ti" [ngClass]="getTransactionIcon(tx.type)"
+                   aria-hidden="true"></i>
+              </div>
+
+              <div class="tx-info">
+                <p class="tx-desc">{{ tx.description || '—' }}</p>
+                <p class="tx-date">
+                  {{ tx.date | date:'dd MMM yyyy, HH:mm':'':'fr' }}
+                </p>
+              </div>
+
+              <div class="tx-amount" [ngClass]="getTransactionClass(tx.type)">
+                <span>
+                  {{ getTransactionClass(tx.type) === 'tx--credit' ? '+' : '-' }}
+                  {{ formatAmount(tx.amount) }}
+                </span>
+                <span class="tx-status"
+                  [ngClass]="{
+                    'status--success': tx.status === 'SUCCESS',
+                    'status--danger':  tx.status === 'FAILED',
+                    'status--warning': tx.status === 'PENDING'
+                  }">
+                  {{ tx.status }}
+                </span>
+              </div>
+
+            </li>
+          </ul>
+
+        </section>
+
+      </ng-container>
+    </div>
+  </main>
+</div>

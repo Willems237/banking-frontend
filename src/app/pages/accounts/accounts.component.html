@@ -1,0 +1,169 @@
+<section class="accounts-page">
+
+  <!-- ══════════ EN-TÊTE ══════════ -->
+  <header class="accounts-page__header">
+    <div>
+      <h1 class="accounts-page__title">Mes comptes</h1>
+      <p class="accounts-page__subtitle">
+        {{ accounts.length }} compte{{ accounts.length > 1 ? 's' : '' }}
+      </p>
+    </div>
+    <button class="btn btn--primary" (click)="openCreateModal()">
+      <i class="ti ti-plus" aria-hidden="true"></i>
+      Nouveau compte
+    </button>
+  </header>
+
+  <!-- ══════════ ALERTES ══════════ -->
+  <div class="alert alert--success" *ngIf="success" role="alert">
+    <i class="ti ti-circle-check" aria-hidden="true"></i>
+    {{ success }}
+  </div>
+  <div class="alert alert--danger" *ngIf="error" role="alert">
+    <i class="ti ti-alert-circle" aria-hidden="true"></i>
+    {{ error }}
+  </div>
+
+  <!-- ══════════ CHARGEMENT ══════════ -->
+  <div class="skeleton-grid" *ngIf="loading">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3]"></div>
+  </div>
+
+  <!-- ══════════ LISTE DES COMPTES ══════════ -->
+  <div class="accounts-grid" *ngIf="!loading">
+
+    <div *ngIf="accounts.length === 0" class="empty-state">
+      <i class="ti ti-building-bank" aria-hidden="true"></i>
+      <p>Aucun compte disponible.</p>
+      <button class="btn btn--primary" (click)="openCreateModal()">
+        Créer mon premier compte
+      </button>
+    </div>
+
+    <app-account-card
+      *ngFor="let account of accounts; trackBy: trackById"
+      [account]="account"
+      [showActions]="true"
+      (onDelete)="confirmDelete(account)"
+    />
+
+  </div>
+
+
+  <!-- ══════════ MODALE — CRÉATION ══════════ -->
+  <div class="modal-overlay" *ngIf="showCreateModal" (click)="closeCreateModal()">
+    <div class="modal" role="dialog" aria-modal="true"
+         aria-labelledby="modal-create-title"
+         (click)="$event.stopPropagation()">
+
+      <header class="modal__header">
+        <h2 id="modal-create-title">Nouveau compte</h2>
+        <button class="btn-icon" (click)="closeCreateModal()" aria-label="Fermer">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <form class="modal__body" [formGroup]="createForm" (ngSubmit)="onCreateAccount()">
+
+        <!-- Label -->
+        <div class="form-group">
+          <label class="form-label" for="label">Nom du compte</label>
+          <input
+            id="label"
+            type="text"
+            class="form-input"
+            [class.form-input--error]="labelCtrl?.invalid && labelCtrl?.touched"
+            formControlName="label"
+            placeholder="Ex : Compte principal"
+          />
+          <span class="form-error"
+            *ngIf="labelCtrl?.invalid && labelCtrl?.touched">
+            Minimum 3 caractères requis.
+          </span>
+        </div>
+
+        <!-- Type de compte -->
+        <div class="form-group">
+          <label class="form-label">Type de compte</label>
+          <div class="type-selector">
+            <label
+              class="type-option"
+              *ngFor="let type of accountTypes"
+              [class.type-option--selected]="
+                accountTypeCtrl?.value === type.value
+              "
+            >
+              <input
+                type="radio"
+                formControlName="account_type"
+                [value]="type.value"
+                class="sr-only"
+              />
+              {{ type.label }}
+            </label>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <footer class="modal__footer">
+          <button
+            type="button"
+            class="btn btn--ghost"
+            (click)="closeCreateModal()"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="btn btn--primary"
+            [disabled]="createForm.invalid || submitting"
+          >
+            <i class="ti ti-loader-2 spin" *ngIf="submitting" aria-hidden="true"></i>
+            {{ submitting ? 'Création...' : 'Créer' }}
+          </button>
+        </footer>
+
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ══════════ MODALE — CONFIRMATION SUPPRESSION ══════════ -->
+  <div class="modal-overlay" *ngIf="showDeleteModal" (click)="cancelDelete()">
+    <div class="modal modal--sm" role="dialog" aria-modal="true"
+         (click)="$event.stopPropagation()">
+
+      <header class="modal__header">
+        <h2>Désactiver le compte</h2>
+        <button class="btn-icon" (click)="cancelDelete()" aria-label="Fermer">
+          <i class="ti ti-x" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="modal__body">
+        <p>
+          Voulez-vous désactiver le compte
+          <strong>{{ accountToDelete?.label }}</strong> ?
+          Cette action est réversible depuis l'administration.
+        </p>
+        <p class="text--danger" *ngIf="error">{{ error }}</p>
+      </div>
+
+      <footer class="modal__footer">
+        <button class="btn btn--ghost" (click)="cancelDelete()">
+          Annuler
+        </button>
+        <button
+          class="btn btn--danger"
+          (click)="onDeleteAccount()"
+          [disabled]="submitting"
+        >
+          <i class="ti ti-loader-2 spin" *ngIf="submitting" aria-hidden="true"></i>
+          {{ submitting ? 'Suppression...' : 'Désactiver' }}
+        </button>
+      </footer>
+
+    </div>
+  </div>
+
+</section>
