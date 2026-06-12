@@ -176,7 +176,7 @@
   .accounts-list {
     padding: .6rem;
     display: flex;
-    flex-direction: column;
+    flex-direction: row-reverse;
     gap: .4rem;
   }
    

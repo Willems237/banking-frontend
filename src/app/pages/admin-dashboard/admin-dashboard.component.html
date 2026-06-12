@@ -1,5 +1,5 @@
 <section class="admin-page">
-
+ 
   <!-- ══════ EN-TÊTE ══════ -->
   <header class="admin-page__header">
     <div>
@@ -11,7 +11,7 @@
       Nouveau personnel
     </button>
   </header>
-
+ 
   <!-- ══════ ALERTES ══════ -->
   <div class="alert alert--success" *ngIf="success" role="alert">
     <i class="ti ti-circle-check" aria-hidden="true"></i> {{ success }}
@@ -19,34 +19,41 @@
   <div class="alert alert--danger" *ngIf="error" role="alert">
     <i class="ti ti-alert-circle" aria-hidden="true"></i> {{ error }}
   </div>
-
-  <!-- ══════ STATS ══════ -->
+ 
+  <!-- ══════ STATS — chaque carte avec sa couleur ══════ -->
   <div class="stats-grid">
-    <div class="stat-card">
+ 
+    <div class="stat-card stat-card--total">
       <span class="stat-card__label">Total utilisateurs</span>
       <span class="stat-card__value">{{ totalUsers }}</span>
     </div>
-    <div class="stat-card">
+ 
+    <div class="stat-card stat-card--customer">
       <span class="stat-card__label">Clients</span>
       <span class="stat-card__value">{{ totalCustomers }}</span>
     </div>
-    <div class="stat-card">
+ 
+    <div class="stat-card stat-card--manager">
       <span class="stat-card__label">Gestionnaires</span>
       <span class="stat-card__value">{{ totalManagers }}</span>
     </div>
-    <div class="stat-card">
+ 
+    <div class="stat-card stat-card--admin">
       <span class="stat-card__label">Administrateurs</span>
       <span class="stat-card__value">{{ totalAdmins }}</span>
     </div>
+ 
   </div>
-
+ 
   <!-- ══════ TABLEAU UTILISATEURS ══════ -->
   <div class="table-card">
-
+ 
+    <!-- Skeleton -->
     <div class="skeleton-rows" *ngIf="loading">
       <div class="skeleton-row" *ngFor="let i of [1,2,3,4,5]"></div>
     </div>
-
+ 
+    <!-- Table -->
     <table class="data-table" *ngIf="!loading && users.length > 0">
       <thead>
         <tr>
@@ -59,145 +66,230 @@
       </thead>
       <tbody>
         <tr *ngFor="let user of users; trackBy: trackById">
-
-          <td class="user-cell">
-            <div class="user-avatar">
-              {{ user.username.charAt(0).toUpperCase() }}
-            </div>
-            <div>
-              <p class="user-name">{{ user.username }}</p>
-              <p class="user-sub">
-                {{ user.first_name }} {{ user.last_name }}
-              </p>
+ 
+          <!-- ✅ Avatar coloré selon le rôle -->
+          <td>
+            <div class="user-cell">
+              <div class="user-avatar"
+                [ngClass]="{
+                  'user-avatar--admin':    user.profile?.role === 'ADMIN',
+                  'user-avatar--manager':  user.profile?.role === 'MANAGER',
+                  'user-avatar--customer': user.profile?.role === 'CUSTOMER'
+                }">
+                {{ user.username.charAt(0).toUpperCase() }}
+              </div>
+              <div>
+                <p class="user-name">{{ user.username }}</p>
+                <p class="user-sub">
+                  {{ user.first_name }} {{ user.last_name }}
+                </p>
+              </div>
             </div>
           </td>
-
+ 
+          <!-- ✅ Badge rôle coloré -->
           <td>
             <span class="badge"
-              [ngClass]="getRoleBadgeClass(user.profile?.role ?? '')">
+              [ngClass]="{
+                'badge--admin':    user.profile?.role === 'ADMIN',
+                'badge--manager':  user.profile?.role === 'MANAGER',
+                'badge--customer': user.profile?.role === 'CUSTOMER'
+              }">
+              <i class="ti"
+                [ngClass]="{
+                  'ti-shield':    user.profile?.role === 'ADMIN',
+                  'ti-briefcase': user.profile?.role === 'MANAGER',
+                  'ti-user':      user.profile?.role === 'CUSTOMER'
+                }"
+                aria-hidden="true"
+                style="font-size: 10px;">
+              </i>
               {{ getRoleLabel(user.profile?.role ?? '') }}
             </span>
           </td>
-
+ 
+          <!-- Email -->
           <td class="text--muted">{{ user.email }}</td>
-
+ 
+          <!-- ✅ Badge statut coloré -->
           <td>
             <span class="badge"
               [ngClass]="user.is_active ? 'badge--success' : 'badge--neutral'">
+              <i class="ti"
+                [ngClass]="user.is_active ? 'ti-circle-filled' : 'ti-circle'"
+                aria-hidden="true"
+                style="font-size: 7px;">
+              </i>
               {{ user.is_active ? 'Actif' : 'Inactif' }}
             </span>
           </td>
-
+ 
+          <!-- ✅ Bouton action coloré selon statut -->
           <td>
             <button
               class="btn btn--sm"
-              [ngClass]="user.is_active ? 'btn--ghost' : 'btn--primary'"
+              [ngClass]="user.is_active ? 'btn--danger' : 'btn--activate'"
               (click)="toggleUserStatus(user)"
             >
+              <i class="ti"
+                [ngClass]="user.is_active ? 'ti-lock' : 'ti-lock-open'"
+                aria-hidden="true">
+              </i>
               {{ user.is_active ? 'Désactiver' : 'Activer' }}
             </button>
           </td>
-
+ 
         </tr>
       </tbody>
     </table>
-
+ 
+    <!-- Vide -->
     <div class="empty-state" *ngIf="!loading && users.length === 0">
       <i class="ti ti-users" aria-hidden="true"></i>
       <p>Aucun utilisateur trouvé.</p>
     </div>
-
+ 
   </div>
-
-
+ 
+ 
   <!-- ══════ MODALE CRÉATION ══════ -->
-  <div class="modal-overlay" *ngIf="showCreateModal" (click)="closeCreateModal()">
-    <div class="modal" role="dialog" aria-modal="true"
+  <div class="modal-overlay"
+       *ngIf="showCreateModal"
+       (click)="closeCreateModal()">
+ 
+    <div class="modal"
+         role="dialog"
+         aria-modal="true"
          aria-labelledby="modal-staff-title"
          (click)="$event.stopPropagation()">
-
+ 
       <header class="modal__header">
         <h2 id="modal-staff-title">Créer un compte personnel</h2>
-        <button class="btn-icon" (click)="closeCreateModal()" aria-label="Fermer">
+        <button class="btn-icon"
+                (click)="closeCreateModal()"
+                aria-label="Fermer">
           <i class="ti ti-x" aria-hidden="true"></i>
         </button>
       </header>
-
-      <form class="modal__body" [formGroup]="staffForm"
+ 
+      <form class="modal__body"
+            [formGroup]="staffForm"
             (ngSubmit)="onCreateStaff()">
-
+ 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="username">Nom d'utilisateur</label>
-            <input id="username" type="text" class="form-input"
+            <label class="form-label" for="username">
+              Nom d'utilisateur
+            </label>
+            <input
+              id="username"
+              type="text"
+              class="form-input"
               formControlName="username"
-              [class.form-input--error]="usernameCtrl?.invalid && usernameCtrl?.touched"
-              placeholder="john_doe" />
+              [class.form-input--error]="
+                usernameCtrl?.invalid && usernameCtrl?.touched
+              "
+              placeholder="john_doe"
+              autocomplete="off"
+            />
             <span class="form-error"
-              *ngIf="usernameCtrl?.invalid && usernameCtrl?.touched">
+                  *ngIf="usernameCtrl?.invalid && usernameCtrl?.touched">
               Minimum 3 caractères.
             </span>
           </div>
+ 
           <div class="form-group">
             <label class="form-label" for="email">Email</label>
-            <input id="email" type="email" class="form-input"
+            <input
+              id="email"
+              type="email"
+              class="form-input"
               formControlName="email"
-              [class.form-input--error]="emailCtrl?.invalid && emailCtrl?.touched"
-              placeholder="john@axioma.com" />
+              [class.form-input--error]="
+                emailCtrl?.invalid && emailCtrl?.touched
+              "
+              placeholder="john@axioma.cm"
+            />
             <span class="form-error"
-              *ngIf="emailCtrl?.invalid && emailCtrl?.touched">
-              Email invalide.
+                  *ngIf="emailCtrl?.invalid && emailCtrl?.touched">
+              Adresse email invalide.
             </span>
           </div>
         </div>
-
+ 
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="password">Mot de passe</label>
-            <input id="password" type="password" class="form-input"
+            <input
+              id="password"
+              type="password"
+              class="form-input"
               formControlName="password"
-              [class.form-input--error]="passwordCtrl?.invalid && passwordCtrl?.touched"
-              placeholder="Minimum 8 caractères" />
+              [class.form-input--error]="
+                passwordCtrl?.invalid && passwordCtrl?.touched
+              "
+              placeholder="Minimum 8 caractères"
+            />
             <span class="form-error"
-              *ngIf="passwordCtrl?.invalid && passwordCtrl?.touched">
+                  *ngIf="passwordCtrl?.invalid && passwordCtrl?.touched">
               Minimum 8 caractères.
             </span>
           </div>
+ 
           <div class="form-group">
             <label class="form-label" for="phone">Téléphone</label>
-            <input id="phone" type="tel" class="form-input"
+            <input
+              id="phone"
+              type="tel"
+              class="form-input"
               formControlName="phone_number"
-              placeholder="+237 6XX XXX XXX" />
+              placeholder="+237 6XX XXX XXX"
+            />
           </div>
         </div>
-
-        <!-- Rôle -->
+ 
+        <!-- ✅ Sélecteur de rôle -->
         <div class="form-group">
-          <label class="form-label">Rôle</label>
+          <label class="form-label">Rôle du compte</label>
           <div class="type-selector">
-            <label class="type-option"
+            <label
+              class="type-option"
               *ngFor="let opt of roleOptions"
-              [class.type-option--selected]="roleCtrl?.value === opt.value">
-              <input type="radio" formControlName="role"
-                [value]="opt.value" class="sr-only" />
+              [class.type-option--selected]="roleCtrl?.value === opt.value"
+            >
+              <input
+                type="radio"
+                formControlName="role"
+                [value]="opt.value"
+                class="sr-only"
+              />
               {{ opt.label }}
             </label>
           </div>
         </div>
-
+ 
         <footer class="modal__footer">
-          <button type="button" class="btn btn--ghost"
-            (click)="closeCreateModal()">Annuler</button>
-          <button type="submit" class="btn btn--primary"
-            [disabled]="staffForm.invalid || submitting">
-            <i class="ti ti-loader-2 spin" *ngIf="submitting"
+          <button
+            type="button"
+            class="btn btn--ghost"
+            (click)="closeCreateModal()"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            class="btn btn--primary"
+            [disabled]="staffForm.invalid || submitting"
+          >
+            <i class="ti ti-loader-2 spin"
+               *ngIf="submitting"
                aria-hidden="true"></i>
-            {{ submitting ? 'Création...' : 'Créer' }}
+            {{ submitting ? 'Création...' : 'Créer le compte' }}
           </button>
         </footer>
-
+ 
       </form>
     </div>
   </div>
-
+ 
 </section>
